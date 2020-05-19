@@ -19,9 +19,8 @@ namespace ConsoleUI
             if (args.Length ==1) { ActiveRecord.ActiveRecord.dbName = args[0]; }
             if (!CheckDb(ActiveRecord.ActiveRecord.dbName)) { return; }
 
-            ConsoleUI consoleUI = new ConsoleUI();
             MenuBuilder mainMenu = new MainMenu();
-            consoleUI.Run(mainMenu, consoleUI);
+            ConsoleUI.Run(mainMenu);
         }
         /// <summary>
         /// Check if database exists. This does not check correct db schema.

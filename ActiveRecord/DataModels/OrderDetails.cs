@@ -28,7 +28,7 @@ namespace ActiveRecord.DataModels
             throw new NotImplementedException();
         }
 
-        public override void ParseReader(SqlDataReader reader)
+        private void ParseReader(SqlDataReader reader)
         {
             throw new NotImplementedException();
         }

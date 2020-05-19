@@ -9,7 +9,6 @@ namespace ActiveRecord
         private const string connectionString = "Integrated Security = SSPI; Data Source=.\\SQLEXPRESS;";
         public abstract bool Save();
         public abstract void Reload();
-        public abstract void ParseReader(SqlDataReader reader);
         public abstract bool Remove();
 
         public static bool DatabaseExists(string dbName)

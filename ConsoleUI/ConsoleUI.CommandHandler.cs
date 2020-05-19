@@ -16,7 +16,7 @@ namespace ConsoleUI
     /// </summary>
     internal partial class ConsoleUI
     {
-        public void Run(MenuBuilder menu, ConsoleUI consoleUI)
+        public static void Run(MenuBuilder menu)
         {
             Command command;
             do
@@ -29,22 +29,22 @@ namespace ConsoleUI
                     
                     case Command.InventoryMenu:
                         MenuBuilder medicineMenu = new MedicineMenu();
-                        consoleUI.Run(medicineMenu, consoleUI);
+                        Run(medicineMenu);
                         break;
 
                     case Command.ManufacturerMenu:
                         MenuBuilder manufacturerMenu = new ManufacturerMenu();
-                        consoleUI.Run(manufacturerMenu, consoleUI);
+                        Run(manufacturerMenu);
                         break;
 
                     case Command.OrderMenu:
                         MenuBuilder orderMenu = new OrderMenu();
-                        consoleUI.Run(orderMenu, consoleUI);
+                        Run(orderMenu);
                         break;
 
                     case Command.PrescriptionMenu:
                         MenuBuilder prescriptionMenu = new PrescriptionMenu();
-                        consoleUI.Run(prescriptionMenu, consoleUI);
+                        Run(prescriptionMenu);
                         break;
 
                     case Command.ListManufacturers:
@@ -67,7 +67,7 @@ namespace ConsoleUI
                             catch (ArgumentException) { throw; }
                             catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
                             manufacturer = GetManufacturerDetails(id);
-                            consoleUI.AddOrUpdateManufacturer(manufacturer);
+                            AddOrUpdateManufacturer(manufacturer);
                         }
                         catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }
@@ -87,7 +87,7 @@ namespace ConsoleUI
                         try
                         {
                             Manufacturer manufacturer = GetManufacturerDetails();
-                            consoleUI.AddOrUpdateManufacturer(manufacturer);
+                            AddOrUpdateManufacturer(manufacturer);
                             Console.WriteLine(manufacturer);
                         }
                         catch (Exception) { }
@@ -96,7 +96,7 @@ namespace ConsoleUI
                     case Command.DeleteManufacturer:
                         try
                         {
-                            consoleUI.DeleteManufacturer(ConsoleUI.GetId("Podaj Id dostawcy, który ma być usunięty"));
+                            DeleteManufacturer(ConsoleUI.GetId("Podaj Id dostawcy, który ma być usunięty"));
                         }
                         catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }
@@ -122,7 +122,7 @@ namespace ConsoleUI
                             catch (ArgumentException) { throw; }
                             catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
                             medicine = GetMedicineDetails(id);
-                            consoleUI.AddOrUpdateMedicine(medicine);
+                            AddOrUpdateMedicine(medicine);
                         }
                         catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }
@@ -142,7 +142,7 @@ namespace ConsoleUI
                         try
                         {
                             Medicine medicine = GetMedicineDetails();
-                            consoleUI.AddOrUpdateMedicine(medicine);
+                            AddOrUpdateMedicine(medicine);
                             medicine.Reload();
                             Console.WriteLine(medicine);
                         }
@@ -152,7 +152,7 @@ namespace ConsoleUI
                     case Command.DeleteMedicine:
                         try
                         {
-                            consoleUI.DeleteMedicine(ConsoleUI.GetId("Podaj Id leku, który ma być usunięty"));
+                            DeleteMedicine(ConsoleUI.GetId("Podaj Id leku, który ma być usunięty"));
                         }
                         catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }
@@ -180,7 +180,7 @@ namespace ConsoleUI
                             catch (ArgumentException) { throw; }
                             catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
                             prescription = GetPrescriptionDetails(id);
-                            consoleUI.AddOrUpdatePrescription(prescription);
+                            AddOrUpdatePrescription(prescription);
                         }
                         catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }
@@ -190,7 +190,7 @@ namespace ConsoleUI
                         try
                         {
                             Prescription prescription = GetPrescriptionDetails();
-                            consoleUI.AddOrUpdatePrescription(prescription);
+                            AddOrUpdatePrescription(prescription);
                             prescription.Reload();
                             Console.WriteLine(prescription);
                         }
@@ -200,7 +200,7 @@ namespace ConsoleUI
                     case Command.DeletePrescription:
                         try
                         {
-                            consoleUI.DeletePrescription(ConsoleUI.GetId("Podaj Id recepty, która ma być usunięta"));
+                            DeletePrescription(ConsoleUI.GetId("Podaj Id recepty, która ma być usunięta"));
                         }
                         catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }

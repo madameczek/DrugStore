@@ -8,22 +8,23 @@ namespace ConsoleUI
     /// <summary>
     /// Methods used by PrescriptionMenu
     /// </summary>
-    internal partial class ConsoleUI
+    internal static partial class ConsoleUI
     {
-        private Prescription GetPrescriptionDetails(int id = 0) // 0 to insert new record
+        private static Prescription GetPrescriptionDetails(int id = 0) // 0 to insert new record
         {
             Prescription prescription = new Prescription(id);
-            try
+            prescription.CustomerName = GetNotEmptyString("Imię i nazwisko klienta");
+            string pesel;
+            do
             {
-                prescription.CustomerName = GetNotEmptyString("Imię i nazwisko klienta");
-                prescription.Pesel = GetNotEmptyString("Podaj PESEL");  // dodać kontrolę pesel
-                prescription.PrescriptionNumber = GetNotEmptyString("Podaj numer recepty");
-            }
-            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+                pesel = GetNotEmptyString("Podaj PESEL");
+            } while (!PeselChecker.Verify(pesel));
+            prescription.Pesel = pesel;
+            prescription.PrescriptionNumber = GetNotEmptyString("Podaj numer recepty");
             return prescription;
         }
 
-        private void AddOrUpdatePrescription(Prescription prescription)
+        private static void AddOrUpdatePrescription(Prescription prescription)
         {
             try
             {
@@ -33,7 +34,7 @@ namespace ConsoleUI
             catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
         }
 
-        private Prescription ReloadPrescription(int id)
+        private static Prescription ReloadPrescription(int id)
         {
             Prescription prescription = new Prescription(id);
             try
@@ -46,9 +47,9 @@ namespace ConsoleUI
             return prescription;
         }
 
-        private void PrintPrescriptions(int manufacurerId = 0) { }
+        private static void PrintPrescriptions(int manufacurerId = 0) { }
 
-        private void DeletePrescription(int id)
+        private static void DeletePrescription(int id)
         {
             try
             {

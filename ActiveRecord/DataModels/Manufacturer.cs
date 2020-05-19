@@ -41,8 +41,7 @@ namespace ActiveRecord.DataModels
                     "values(@Name, @Address, @City, @Country);" +
                     "select scope_identity();";
                 Id = Convert.ToInt32(command.ExecuteScalar());
-                if (Id > 0) { return true; }
-                else { return false; }
+                return Id > 0;
             }
             if (Id > 0)
             {
@@ -51,13 +50,9 @@ namespace ActiveRecord.DataModels
                     "where Id = @id";
                 int result = command.ExecuteNonQuery();
                 if (result == 1) { return true; }
-                else if (result == 0)
-                {
-                    throw new DbResultErrorException($"Nie odnaleziono rekordu o Id={Id}.");
-                }
                 else
                 {
-                    throw new DbResultErrorException($"Problem integralności danych: Znaleziono {result} rekordy/ów o id={Id}");
+                    throw new DbResultErrorException($"Nie odnaleziono rekordu o Id={Id}.");
                 }
             }
             return false;
@@ -103,7 +98,7 @@ namespace ActiveRecord.DataModels
             return manufacturers;
         }
 
-        public override void ParseReader(SqlDataReader reader)
+        private void ParseReader(SqlDataReader reader)
         {
             Id = reader.GetInt32("Id");
             if (!(reader["Name"] is DBNull)) { Name = reader["Name"].ToString(); }
@@ -125,14 +120,11 @@ namespace ActiveRecord.DataModels
             int result = command.ExecuteNonQuery();
 
             if (result == 1) { return true; }
-            else if (result == 0)
+            else
             {
                 throw new DbResultErrorException($"Nie odnaleziono rekordu o id={Id}.");
             }
-            else
-            {
-                throw new DbResultErrorException($"Problem integralności danych: Znaleziono i usunięto {result} rekordy/ów o id={Id}");
-            }
+            
         }
 
         public override string ToString()

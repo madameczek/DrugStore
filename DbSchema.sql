@@ -1,6 +1,7 @@
 USE master;
 GO
 
+IF DB_ID (N'DrugStore') IS NOT NULL
 ALTER DATABASE DrugStore SET SINGLE_USER with ROLLBACK IMMEDIATE
 IF DB_ID (N'DrugStore') IS NOT NULL
 DROP DATABASE DrugStore;
@@ -67,9 +68,9 @@ insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) va
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Vitamina C Gigant 1000 mg', 4, 15.23, 532, 0);
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Multivitamina Pokrzywa', 2, 34.00, 3, 1);
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Cardio Lek 40 mg tabletki', 3, 96.00, 4, 1);
-insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Fostex 100+6 inhalator', 5, 96.20, 5, 0);
+insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Fostex 100+6 inhalator', 5, 96.20, 5, 1);
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Lek na wszystko', 3, NULL , NULL , 1);
-insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('£ó¿ko terapeutyczne', 4, 4232.23, NULL , 1);
+insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('£ó¿ko terapeutyczne', 4, 4232.23, NULL , NULL);
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Brain Healer', 2, 834.00, 2, 0);
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Neomag Rozkurcz nogi', 5, 19.32, 43, 0);
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Neomag Skurcz Forte', 4, 23.35, 43, 0);

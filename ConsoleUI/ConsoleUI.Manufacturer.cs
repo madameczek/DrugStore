@@ -8,9 +8,9 @@ namespace ConsoleUI
     /// <summary>
     /// Methods used by InventoryMenu
     /// </summary>
-    internal partial class ConsoleUI
+    internal static partial class ConsoleUI
     {
-        private Manufacturer GetManufacturerDetails(int id = 0) // 0 to insert new record
+        private static Manufacturer GetManufacturerDetails(int id = 0) // 0 to insert new record
         {
             Manufacturer manufacturer = new Manufacturer(id)
             {
@@ -22,7 +22,7 @@ namespace ConsoleUI
             return manufacturer;
         }
 
-        private void AddOrUpdateManufacturer(Manufacturer manufacturer)
+        private static void AddOrUpdateManufacturer(Manufacturer manufacturer)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace ConsoleUI
             catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
         }
 
-        private Manufacturer ReloadManufacturer(int id)
+        private static Manufacturer ReloadManufacturer(int id)
         {
             Manufacturer manufacturer = new Manufacturer(id);
             try
@@ -45,7 +45,7 @@ namespace ConsoleUI
             return manufacturer;
         }
 
-        private void PrintManufacturers()
+        private static void PrintManufacturers()
         {
             List<Manufacturer> manufacturers;
             try
@@ -84,7 +84,7 @@ namespace ConsoleUI
             ConsoleUI.WriteLine(new string('-', paddingName + paddingAddress + paddingCity + paddingCountry + 8), ConsoleUI.Colors.colorTitleBar);
         }
 
-        private void DeleteManufacturer(int id)
+        private static void DeleteManufacturer(int id)
         {
             try
             {

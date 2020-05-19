@@ -37,8 +37,7 @@ namespace ActiveRecord.DataModels
                     "values(@CustomerName, @CustomerPesel, @PrescriptionNumber);" +
                     "select scope_identity();";
                 Id = Convert.ToInt32(command.ExecuteScalar());
-                if (Id > 0) { return true; }
-                else { return false; }
+                return Id > 0;
             }
             if (Id > 0)
             {
@@ -46,13 +45,9 @@ namespace ActiveRecord.DataModels
                     "CustomerPesel = @CustomerPesel, PrescriptionNumber = @PrescriptionNumber where Id = @id";
                 int result = command.ExecuteNonQuery();
                 if (result == 1) { return true; }
-                else if (result == 0)
-                {
-                    throw new DbResultErrorException($"Nie odnaleziono rekordu o Id={Id}.");
-                }
                 else
                 {
-                    throw new DbResultErrorException($"Problem integralności danych: Znaleziono {result} rekordy/ów o id={Id}");
+                    throw new DbResultErrorException($"Nie odnaleziono rekordu o Id={Id}.");
                 }
             }
             return false;
@@ -100,7 +95,7 @@ namespace ActiveRecord.DataModels
             }
         }
 
-        public override void ParseReader(SqlDataReader reader)
+        private void ParseReader(SqlDataReader reader)
         {
             Id = reader.GetInt32("Id");
             if (!(reader["CustomerName"] is DBNull)) { CustomerName = reader.GetString("CustomerName"); }

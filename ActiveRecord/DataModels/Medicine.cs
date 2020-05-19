@@ -41,8 +41,7 @@ namespace ActiveRecord.DataModels
                     "values(@Name, @ManufacturerId, @Price, @StockQty, @IsPrescription);" +
                     "select scope_identity();";
                 Id = Convert.ToInt32(command.ExecuteScalar());
-                if (Id > 0) { return true; }
-                else { return false; }
+                return Id > 0;
             }
             if (Id > 0)
             {
@@ -54,10 +53,6 @@ namespace ActiveRecord.DataModels
                 else if (result == 0)
                 {
                     throw new DbResultErrorException($"Nie odnaleziono rekordu o Id={Id}.");
-                }
-                else
-                {
-                    throw new DbResultErrorException($"Problem integralności danych: Znaleziono {result} rekordy/ów o id={Id}");
                 }
             }
             return false;
@@ -110,7 +105,7 @@ namespace ActiveRecord.DataModels
             return medicines;
         }
 
-        public override void ParseReader(SqlDataReader reader)
+        private void ParseReader(SqlDataReader reader)
         { 
             Id = reader.GetInt32("Id");
             if (!(reader["Name"] is DBNull)) { Name = reader.GetString("Name"); }

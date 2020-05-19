@@ -9,9 +9,9 @@ namespace ConsoleUI
     /// <summary>
     /// Methods used by InventoryMenu
     /// </summary>
-    internal partial class ConsoleUI
+    internal static partial class ConsoleUI
     {
-        private Medicine GetMedicineDetails(int id = 0) // 0 to insert new record
+        private static Medicine GetMedicineDetails(int id = 0) // 0 to insert new record
         {
             Medicine medicine = new Medicine(id);
             try
@@ -26,7 +26,7 @@ namespace ConsoleUI
             return medicine;
         }
 
-        private void AddOrUpdateMedicine(Medicine medicine)
+        private static void AddOrUpdateMedicine(Medicine medicine)
         {
             try
             {
@@ -36,20 +36,20 @@ namespace ConsoleUI
             catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
         }
 
-        private Medicine ReloadMedicine(int id)
+        private static Medicine ReloadMedicine(int id)
         {
             Medicine medicine = new Medicine(id);
             try
             {
                 medicine.Reload();
             }
-            catch (ArgumentException e) { throw; }
+            catch (ArgumentException) { throw; }
             catch (DbResultErrorException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
             catch (Exception) { ConsoleUI.WriteLine("Nieznany błąd", ConsoleUI.Colors.colorError); throw; }
             return medicine;
         }
 
-        private void PrintMedicines(int manufacurerId = 0)
+        private static void PrintMedicines(int manufacurerId = 0)
         {
             List<Medicine> medicines;
             try
@@ -82,7 +82,7 @@ namespace ConsoleUI
                 ConsoleUI.Write("|", ConsoleUI.Colors.colorTitleBar);
                 Console.Write(medicine.Manufacturer.ToString().PadRight(paddingManufacturer));
                 ConsoleUI.Write("|", ConsoleUI.Colors.colorTitleBar);
-                Console.Write(medicine.Price.ToString().PadLeft(paddingPrice));
+                Console.Write($"{(medicine.Price == null ? string.Empty : ((decimal)medicine.Price).ToString("#.00")).PadLeft(paddingPrice)}");
                 ConsoleUI.Write("|", ConsoleUI.Colors.colorTitleBar);
                 Console.Write(medicine.StockQty.ToString().PadLeft(paddingStockQty));
                 ConsoleUI.Write("|", ConsoleUI.Colors.colorTitleBar);
@@ -92,7 +92,7 @@ namespace ConsoleUI
             ConsoleUI.WriteLine(new string('-', paddingName + paddingManufacturer + paddingPrice + paddingStockQty + paddingIsPrescription + 9), ConsoleUI.Colors.colorTitleBar);
         }
 
-        private void DeleteMedicine(int id)
+        private static void DeleteMedicine(int id)
         {
             try
             {

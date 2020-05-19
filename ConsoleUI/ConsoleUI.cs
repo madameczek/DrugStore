@@ -8,7 +8,7 @@ namespace ConsoleUI
     /// <summary>
     /// Common static methods for basic console I/O
     /// </summary>
-    internal partial class ConsoleUI
+    internal static partial class ConsoleUI
     {
         public readonly struct Colors
         {
