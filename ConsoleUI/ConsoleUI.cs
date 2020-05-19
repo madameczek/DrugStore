@@ -5,9 +5,12 @@ using System.Text;
 
 namespace ConsoleUI
 {
-    public class ConsoleUI
+    /// <summary>
+    /// Common static methods for basic console I/O
+    /// </summary>
+    internal partial class ConsoleUI
     {
-        public struct Colors
+        public readonly struct Colors
         {
             public const ConsoleColor colorInputPrompt = ConsoleColor.DarkCyan;
             public const ConsoleColor colorSuccesss = ConsoleColor.Green;
@@ -20,8 +23,8 @@ namespace ConsoleUI
         public static string GetString(string prompt)
         {
             Console.Write($"{prompt}: ");
-            string input = Console.ReadLine().Trim();
-            return input;
+            string output = Console.ReadLine().Trim();
+            return string.IsNullOrEmpty(output) ? null : output;
         }
 
         public static string GetNotEmptyString(string prompt)
@@ -30,7 +33,7 @@ namespace ConsoleUI
             do
             {
                 output = GetString(prompt);
-            } while (output == string.Empty);
+            } while (string.IsNullOrEmpty(output));
             return output;
         }
 
@@ -58,6 +61,31 @@ namespace ConsoleUI
         public static void WriteLine(string text)
         {
             Console.WriteLine(text);
+        }
+
+        // When using Console.TreatControlCAsInput = true;
+        // standard Console.ReadLine() do not work properly due to MS bug.
+        // Therefore custom Readline() should be developed.
+        // Move to feature branch. It needs some work...
+        public static string ReadLine()
+        {
+            ConsoleKeyInfo cki;
+            StringBuilder sb = new StringBuilder();
+            do
+            {
+                cki = Console.ReadKey();
+                if (cki.Key == ConsoleKey.Backspace)
+                {
+                    sb.Length -= 1;
+                    Console.CursorLeft -= 1;
+                }
+                if (cki.Key == ConsoleKey.Escape)
+                {
+                    return null;
+                }
+                sb.Append(cki.KeyChar);
+            } while (cki.Key != ConsoleKey.Enter);
+            return sb.ToString();
         }
     }
 }

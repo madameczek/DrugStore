@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Data.SqlClient;
-using System.IO;
 
 namespace ActiveRecord
 {
-    
     public abstract class ActiveRecord
     {
+        public static string dbName = "DrugStore";
         private const string connectionString = "Integrated Security = SSPI; Data Source=.\\SQLEXPRESS;";
-        private const string dbName = "DrugStore";
-        public int ID { get; private set; }
-        public abstract void Save();
+        public abstract bool Save();
         public abstract void Reload();
-        public abstract void Remove();
+        public abstract void ParseReader(SqlDataReader reader);
+        public abstract bool Remove();
 
-        public static bool DatabaseExists(string dbName = dbName)
+        public static bool DatabaseExists(string dbName)
         {
             using SqlConnection connection = new SqlConnection();
             using SqlCommand command = new SqlCommand();
@@ -26,16 +24,10 @@ namespace ActiveRecord
             return command.ExecuteScalar() != DBNull.Value;
         }
 
-        internal protected void DbConnect(string dbName = dbName)
+        internal static void DbConnect(SqlConnection connection, string dbName)
         {
-            SqlConnection connection = new SqlConnection
-            {
-                ConnectionString = string.Concat(connectionString, "Initial Catalog=", dbName, ";")
-            };
+            connection.ConnectionString = string.Concat(connectionString, "Initial Catalog=", dbName, ";");
             connection.Open();
         }
-
- 
-        //+conn open/close
     }
 }

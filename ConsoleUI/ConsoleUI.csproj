@@ -1,8 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>DrugStore</AssemblyName>
+    <Authors>Marek Adameczek</Authors>
+    <Description>Simple console app demonstrating SQL database connection using Active Record design pattern. Console menu is a reusable code stored in MenuBuilder Class.</Description>
+    <Copyright>Marek Adameczek</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

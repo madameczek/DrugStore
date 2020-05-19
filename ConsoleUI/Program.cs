@@ -1,5 +1,4 @@
 ﻿using System;
-using ActiveRecord;
 using System.Threading;
 using System.Data.SqlClient;
 
@@ -7,34 +6,31 @@ namespace ConsoleUI
 {
     class Program
     {
-        
-        static void Main()
+        static void Main(string[] args)
         {
-
-            if (!CheckDb()) { return; }
-            Command command;
-            do 
+            Console.Title = "Drug Store 0.9 beta. SQL database based drug store helper.";
+            if (args.Length > 1)
             {
-                MenuBuilder mainMenu = new MainMenu();
-                mainMenu.PrintMenu();
-                command = mainMenu.GetCommand(); 
-            } while (command != Command.exit);
+                ConsoleUI.WriteLine("Można podać tylko jeden argument jako nazwę bazy danych.", ConsoleUI.Colors.colorError);
+                return;
+            }
+            if (args.Length ==1) { ActiveRecord.ActiveRecord.dbName = args[0]; }
+            if (!CheckDb(ActiveRecord.ActiveRecord.dbName)) { return; }
 
-            
-
-
-
-            //Console.ReadKey();
+            ConsoleUI consoleUI = new ConsoleUI();
+            MenuBuilder mainMenu = new MainMenu();
+            consoleUI.Run(mainMenu, consoleUI);
         }
-
-        static bool CheckDb()
+        static bool CheckDb(string dbName)
         {
-            Console.Write("Łączę z bazą danych... ");
+
+            string connecting = $"Łączę z bazą danych '{dbName}'... ";
+            Console.Write(connecting);
             try
             {
-                if (!ActiveRecord.ActiveRecord.DatabaseExists())
+                if (!ActiveRecord.ActiveRecord.DatabaseExists(dbName))
                 {
-                    ConsoleUI.WriteLine($"\nNie można znaleźć bazy danych. Sprawdź, czy baza danych jest założona zgodnie z instrukcjami w pliku readme.md", ConsoleUI.Colors.colorError);
+                    ConsoleUI.WriteLine($"\nNie można znaleźć bazy danych. Sprawdź, czy baza danych jest utworzona zgodnie z instrukcjami w pliku readme.md", ConsoleUI.Colors.colorError);
                     Thread.Sleep(2000);
                     return false;
                 }
@@ -43,7 +39,8 @@ namespace ConsoleUI
                     ConsoleUI.Write("OK", ConsoleUI.Colors.colorSuccesss);
                     Thread.Sleep(800);
                     Console.CursorLeft = 0;
-                    Console.Write(new string(' ', 27));
+                    //Console.Write(new string(' ', connecting.Length + 2));
+                    ConsoleUI.Write("Drug Store 0.9 beta. Welcome".PadRight(connecting.Length + 2), ConsoleUI.Colors.colorTitleBar);
                     Console.CursorLeft = 0;
                 }
             }
@@ -56,5 +53,4 @@ namespace ConsoleUI
             return true;
         }
     }
-    
 }

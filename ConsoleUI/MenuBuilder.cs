@@ -1,34 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace ConsoleUI
 {
     public enum Command
     {
-        AddCustomer = 1,
-        AddPrescription = 2,
-        AddOrder = 3,
-        DeleteOrder = 4,
-        AddOrderItem = 5,
-        DeleteOrderItem = 6,
-        AddManufacturer = 7,
-        AddMedicine = 8,
+        InventoryMenu = 1,
+        ManufacturerMenu,
+        PrescriptionMenu,
+        OrderMenu,
+
+        ListMedicines = 11,
+        PrintMedicine,
+        UpdateMedicine,
+        AddMedicine,
+        DeleteMedicine,
+
+        ListManufacturers = 21,
+        PrintManufacturer,
+        UpdateManufacturer,
+        AddManufacturer,
+        DeleteManufacturer,
+
+        ListPrescriptions = 31,
+        PrintPrescription,
+        UpdatePresctiption,
+        AddPrescription,
+        DeletePrescription,
+
+        ListOrderById = 41,
+        ListOrderByName,
+        ListOrderByPesel,
+        PrintOrder,
+        AddOrder,
+        AddOrderItem,
+        DeleteOrderItem,
+        DeleteOrder,
+
         exit = 0
     }
     abstract class MenuBuilder
     {
+        protected abstract string MenuTitle { get; }
         private readonly string selectOptionText = "Wybierz opcję:";
-        public struct MenuItem
+        private const int promptKeyPadding = 3;
+        protected struct MenuItem
         {
-            internal ConsoleKey ItemKey { get; set; }
+            internal ConsoleKey CommandKey { get; set; }
             public Command Command { get; private set; }
             internal string PromptKey { get; private set; }
             internal string PromptText { get; private set; }
 
-            public MenuItem(ConsoleKey itemKey, Command command, string promptKey, string promptText)
+            public MenuItem(ConsoleKey commandKey, Command command, string promptKey, string promptText)
             {
-                ItemKey = itemKey;
+                CommandKey = commandKey;
                 Command = command;
                 PromptKey = promptKey;
                 PromptText = promptText;
@@ -37,25 +64,27 @@ namespace ConsoleUI
             /// <summary>
             /// Three parameters constructor use only for digit keys 0 - 9
             /// </summary>
-            /// <param name="itemKey"></param>
+            /// <param name="commandKey"></param>
             /// <param name="command"></param>
             /// <param name="promptText"></param>
-            public MenuItem(ConsoleKey itemKey, Command command, string promptText)
+            public MenuItem(ConsoleKey commandKey, Command command, string promptText)
             {
-                ItemKey = itemKey;
+                CommandKey = commandKey;
                 Command = command;
-                PromptKey = itemKey.ToString().Substring(1, 1);
+                PromptKey = commandKey.ToString().Substring(1, 1);
                 PromptText = promptText;
             }
         }
 
-        public abstract List<MenuItem> Items { get; }
+        protected abstract List<MenuItem> Items { get; }
 
         public void PrintMenu()
         {
+            Console.WriteLine();
+            ConsoleUI.WriteLine(MenuTitle, ConsoleUI.Colors.colorInputPrompt);
             foreach (MenuItem item in Items)
             {
-                ConsoleUI.Write(item.PromptKey, ConsoleUI.Colors.colorInputPrompt);
+                ConsoleUI.Write(item.PromptKey.PadLeft(promptKeyPadding), ConsoleUI.Colors.colorInputPrompt);
                 Console.WriteLine($" - {item.PromptText}");
             }
             Console.Write(selectOptionText);
@@ -64,31 +93,32 @@ namespace ConsoleUI
         public Command GetCommand()
         {
             bool exitLoop = false;
+            //Console.TreatControlCAsInput = true; // Use of this causes need to use customised version of Readline()
+
             Command command = Command.exit;
             do
             {
-                Console.TreatControlCAsInput = true;
-                ConsoleColor tmpColor = Console.ForegroundColor;
-                Console.ForegroundColor = Console.BackgroundColor;
-                ConsoleKeyInfo consoleKey = Console.ReadKey();
+                ConsoleKeyInfo cki = Console.ReadKey(true);
                 foreach (MenuItem item in Items)
                 {
-                    if (item.ItemKey == consoleKey.Key)
+                    if (item.CommandKey == cki.Key)
                     {
                         exitLoop = true;
                         command = item.Command;
                     }
                 }
                 Console.CursorLeft = selectOptionText.Length;
-                Console.ForegroundColor = tmpColor;
             } while (!exitLoop);
             Console.WriteLine();
             return command;
         }
 
-        public virtual int ParseKey(ConsoleKeyInfo key)
+        // To bound Command enum values higher than 9 with digit keys 0-9
+        // override in derives class and add a shifting number to base method
+        // ie. return base.ParseKey(key) + 10;
+        public virtual int ParseKey(ConsoleKeyInfo cki)
         {
-            return int.Parse(key.Key.ToString().Substring(1, 1));
+            return int.Parse(cki.Key.ToString().Substring(1, 1));
         }
     }
 }

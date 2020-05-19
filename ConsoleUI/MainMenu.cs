@@ -7,19 +7,22 @@ namespace ConsoleUI
 {
     class MainMenu : MenuBuilder
     {
-        public List<MenuItem> items = new List<MenuItem>
+        protected override string MenuTitle => "Menu główne";
+        
+        protected override List<MenuItem> Items => items;
+
+        private readonly List<MenuItem> items = new List<MenuItem>
         {
-            new MenuItem(ConsoleKey.D1, Command.AddCustomer, "Dodaj klienta"),
-            new MenuItem(ConsoleKey.D2, Command.AddPrescription, "Dodaj receptę"),
-            new MenuItem(ConsoleKey.D3, Command.AddOrder, "Dodaj zamówienie"),
-            new MenuItem(ConsoleKey.D4, Command.DeleteOrder, "Usuń zamówienie"),
-            new MenuItem(ConsoleKey.D5, Command.AddOrderItem, "Dodaj pozycję zamówienia"),
-            new MenuItem(ConsoleKey.D6, Command.DeleteOrderItem, "Usuń pozycję zamówienia"),
-            new MenuItem(ConsoleKey.D7, Command.AddManufacturer, "Dodaj dostawcę"),
-            new MenuItem(ConsoleKey.D8, Command.AddMedicine, "Dodaj lek"),
-            new MenuItem(ConsoleKey.Escape, Command.exit, "Esc", "Wyjście")
+            new MenuItem(ConsoleKey.D1, Command.InventoryMenu, "Zarządzaj lekami"),
+            new MenuItem(ConsoleKey.D2, Command.ManufacturerMenu, "Zarządzaj dostawcami"),
+            new MenuItem(ConsoleKey.D3, Command.PrescriptionMenu, "Recepty"),
+            new MenuItem(ConsoleKey.D4, Command.OrderMenu, "Zamówienia"),
+            new MenuItem(ConsoleKey.Escape, Command.exit, "Esc", "Wyjście z programu")
         };
 
-        public override List<MenuItem> Items { get => items; }
+        public override int ParseKey(ConsoleKeyInfo key)
+        {
+            return base.ParseKey(key);
+        }
     }
 }
