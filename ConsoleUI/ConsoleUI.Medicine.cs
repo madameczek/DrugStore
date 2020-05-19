@@ -91,5 +91,23 @@ namespace ConsoleUI
             }
             ConsoleUI.WriteLine(new string('-', paddingName + paddingManufacturer + paddingPrice + paddingStockQty + paddingIsPrescription + 9), ConsoleUI.Colors.colorTitleBar);
         }
+
+        private void DeleteMedicine(int id)
+        {
+            try
+            {
+                PrintResultOK(new Medicine(id).Remove());
+            }
+            catch (ArgumentException) { throw; }
+            catch (DbResultErrorException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
+            catch (Exception e)
+            {
+                if (e.Message.Contains("FK_OrderDetails_Medicines"))
+                {
+                    ConsoleUI.WriteLine("Nie można usunąć leku, bo istnieją w bazie powiązane recepty", ConsoleUI.Colors.colorError);
+                }
+                else { ConsoleUI.WriteLine(e.Message + "Wystąpił nieznany błąd", ConsoleUI.Colors.colorError); }
+            }
+        }
     }
 }

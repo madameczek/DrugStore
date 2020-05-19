@@ -42,6 +42,11 @@ namespace ConsoleUI
                         consoleUI.Run(orderMenu, consoleUI);
                         break;
 
+                    case Command.PrescriptionMenu:
+                        MenuBuilder prescriptionMenu = new PrescriptionMenu();
+                        consoleUI.Run(prescriptionMenu, consoleUI);
+                        break;
+
                     case Command.ListManufacturers:
                         try
                         {
@@ -145,14 +150,65 @@ namespace ConsoleUI
                         break;
 
                     case Command.DeleteMedicine:
-                        DatabaseDump dd = new DatabaseDump();
-                        dd.MedicinesDump();
-                        dd.ManufacturersDump();
-                        goto default;
+                        try
+                        {
+                            consoleUI.DeleteMedicine(ConsoleUI.GetId("Podaj Id leku, który ma być usunięty"));
+                        }
+                        catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
+                        catch (Exception) { }
                         break;
+
+                    case Command.PrintPrescription:
+                        try
+                        {
+                            Prescription prescription = ReloadPrescription(ConsoleUI.GetId("Podaj Id recepty"));
+                            Console.WriteLine(prescription);
+                        }
+                        catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
+                        catch (Exception) { }
+                        break;
+
+                    case Command.UpdatePresctiption:
+                        try
+                        {
+                            int id = ConsoleUI.GetId("Podaj nr recepty, która będzie poprawiana");
+                            Prescription prescription = new Prescription(id);
+                            try
+                            {
+                                prescription.Reload();
+                            }
+                            catch (ArgumentException) { throw; }
+                            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+                            prescription = GetPrescriptionDetails(id);
+                            consoleUI.AddOrUpdatePrescription(prescription);
+                        }
+                        catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
+                        catch (Exception) { }
+                        break;
+
                     case Command.AddPrescription:
-                        goto default;
+                        try
+                        {
+                            Prescription prescription = GetPrescriptionDetails();
+                            consoleUI.AddOrUpdatePrescription(prescription);
+                            prescription.Reload();
+                            Console.WriteLine(prescription);
+                        }
+                        catch (Exception) { }
                         break;
+
+                    case Command.DeletePrescription:
+                        try
+                        {
+                            consoleUI.DeletePrescription(ConsoleUI.GetId("Podaj Id recepty, która ma być usunięta"));
+                        }
+                        catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
+                        catch (Exception) { }
+                        break;
+
+
+                    
+
                     case Command.AddOrder:
                         goto default;
                         break;
@@ -166,9 +222,12 @@ namespace ConsoleUI
                         goto default;
                         break;
                     case Command.exit:
+                        /*DatabaseDump dd = new DatabaseDump();
+                        dd.MedicinesDump();
+                        dd.ManufacturersDump();*/
                         break;
                     default:
-                        ConsoleUI.WriteLine("Komenda nie obsługiwana",ConsoleUI.Colors.colorWarning);
+                        ConsoleUI.WriteLine("Komenda nie obsługiwana", ConsoleUI.Colors.colorWarning);
                         break;
                 }
 

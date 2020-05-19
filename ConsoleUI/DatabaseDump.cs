@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Data.SqlClient;
-using System.Data;
 using ActiveRecord.DataModels;
 using System.IO;
 
@@ -10,6 +8,7 @@ namespace ConsoleUI
 {
     class DatabaseDump
     {
+        public Action<string> printInserts;
         internal void MedicinesDump()
         {
             List<Medicine> medicines;
@@ -23,7 +22,7 @@ namespace ConsoleUI
             {
                 string line = "insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) " +
                     $"values ('{item.Name}', {item.ManufacturerId}, {(item.Price == null ? "NULL" : item.Price.ToString().Replace(',','.'))}, "+
-                    $"{(item.StockQty == null ? "NULL" : item.StockQty.ToString())}, {(item.IsPrescription == null ? "NULL" : (item.IsPrescription == true ? "1":"0"))});\n";
+                    $"{(item.StockQty == null ? "NULL" : item.StockQty.ToString())}, {(item.IsPrescription == null ? "NULL" : (item.IsPrescription == true ? "1":"0"))});{Environment.NewLine}";
                 File.AppendAllText("Medicines.txt", line);
             }
         }
@@ -40,7 +39,7 @@ namespace ConsoleUI
             foreach (var item in manufacturers)
             {
                 string line = "insert into Manufacturers (Name, Address, City, Country) " +
-                    $"values ('{item.Name}', '{(item.Address ?? "NULL")}', '{(item.City ?? "NULL")}', '{(item.Country ?? "NULL")}');\n";
+                    $"values ('{item.Name}', '{(item.Address ?? "NULL")}', '{(item.City ?? "NULL")}', '{(item.Country ?? "NULL")}');{Environment.NewLine}";
                 File.AppendAllText("Manufacturers.txt", line);
             }
         }

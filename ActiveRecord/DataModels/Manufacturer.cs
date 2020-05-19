@@ -8,10 +8,11 @@ namespace ActiveRecord.DataModels
 {
     public sealed class Manufacturer : ActiveRecord
     {
-        private string city;
-        private string address;
-        private string country;
         private string name;
+        private string address;
+        private string city;
+        private string country;
+        
 
         public int Id { get; private set; }
         public string Name { get => name ?? string.Empty; set => name = value; }
@@ -28,7 +29,7 @@ namespace ActiveRecord.DataModels
             using SqlCommand command = new SqlCommand();
             command.Connection = connection;
             command.Parameters.AddWithValue("@Id", Id).SqlDbType = SqlDbType.Int;
-            command.Parameters.AddWithValue("@Name", name).SqlDbType = SqlDbType.NVarChar;
+            command.Parameters.AddWithValue("@Name", name ?? (object)DBNull.Value).SqlDbType = SqlDbType.NVarChar;
             command.Parameters.AddWithValue("@Address", address ?? (object)DBNull.Value).SqlDbType = SqlDbType.NVarChar;
             command.Parameters.AddWithValue("@City", city ?? (object)DBNull.Value).SqlDbType = SqlDbType.NVarChar;
             command.Parameters.AddWithValue("@Country", country ?? (object)DBNull.Value).SqlDbType = SqlDbType.NVarChar;

@@ -39,10 +39,10 @@ namespace ConsoleUI
 
         public static void Write(string text, ConsoleColor color)
         {
-            ConsoleColor tempColor = Console.ForegroundColor;
+            ConsoleColor saveConsoleColor = Console.ForegroundColor;
             Console.ForegroundColor = color;
             Console.Write(text);
-            Console.ForegroundColor = tempColor;
+            Console.ForegroundColor = saveConsoleColor;
         }
 
         public static void Write(string text)

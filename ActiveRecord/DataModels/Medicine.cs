@@ -9,19 +9,15 @@ namespace ActiveRecord.DataModels
     public sealed class Medicine : ActiveRecord
     {
         private string name;
-        private int? manufacturerId;
-        private decimal? price;
-        private int? stockQty;
-        private bool? isPrescription;
         private string manufacturer;
 
         public int Id { get; set; }
         public string Name { get => name ?? string.Empty; set => name = value; }
-        public int? ManufacturerId { get => manufacturerId; set => manufacturerId = value; }
-        public decimal? Price { get => price; set => price = value; }
-        public int? StockQty { get => stockQty; set => stockQty = value; }
-        public bool? IsPrescription { get => isPrescription; set => isPrescription = value; }
-        public string Manufacturer { get => manufacturer ?? string.Empty; set => manufacturer = value; }
+        public int? ManufacturerId { get; set; }
+        public decimal? Price { get; set; }
+        public int? StockQty { get; set; }
+        public bool? IsPrescription { get; set; }
+        public string Manufacturer { get => manufacturer ?? string.Empty; private set => manufacturer = value; }
 
         public Medicine(int id) { Id = id; }
         public Medicine() { }
@@ -32,11 +28,11 @@ namespace ActiveRecord.DataModels
             using SqlCommand command = new SqlCommand();
             command.Connection = connection;
             command.Parameters.AddWithValue("@Id", Id).SqlDbType = SqlDbType.Int;
-            command.Parameters.AddWithValue("@Name", name).SqlDbType = SqlDbType.NVarChar;
+            command.Parameters.AddWithValue("@Name", Name).SqlDbType = SqlDbType.NVarChar;
             command.Parameters.AddWithValue("@ManufacturerId", ManufacturerId).SqlDbType = SqlDbType.Int;
-            command.Parameters.AddWithValue("@Price", price ?? (object)DBNull.Value).SqlDbType = SqlDbType.Decimal;
-            command.Parameters.AddWithValue("@IsPrescription", isPrescription ?? (object)DBNull.Value).SqlDbType = SqlDbType.Bit;
-            command.Parameters.AddWithValue("@StockQty", stockQty ?? (object)DBNull.Value).SqlDbType = SqlDbType.Int;
+            command.Parameters.AddWithValue("@Price", Price ?? (object)DBNull.Value).SqlDbType = SqlDbType.Decimal;
+            command.Parameters.AddWithValue("@IsPrescription", IsPrescription ?? (object)DBNull.Value).SqlDbType = SqlDbType.Bit;
+            command.Parameters.AddWithValue("@StockQty", StockQty ?? (object)DBNull.Value).SqlDbType = SqlDbType.Int;
             DbConnect(connection, dbName);
 
             if (Id == 0)
@@ -74,7 +70,6 @@ namespace ActiveRecord.DataModels
             using SqlConnection connection = new SqlConnection();
             using SqlCommand command = new SqlCommand();
             command.Connection = connection;
-            //command.CommandText = "select * from [Medicines] where Id = @Id";
             command.CommandText = "select m.Id, m.Name, m.ManufacturerId, m.Price, m.StockQty, m.IsPrescription, Manufacturers.Name as Manufacturer from [Medicines] as m " +
                     "join manufacturers on m.ManufacturerId = Manufacturers.id where m.Id = @Id";
             command.Parameters.AddWithValue("@Id", Id).SqlDbType = SqlDbType.Int;
@@ -118,18 +113,35 @@ namespace ActiveRecord.DataModels
         public override void ParseReader(SqlDataReader reader)
         { 
             Id = reader.GetInt32("Id");
-            if (!(reader["Name"] is DBNull)) { Name = reader["Name"].ToString(); }
+            if (!(reader["Name"] is DBNull)) { Name = reader.GetString("Name"); }
             if (!(reader["ManufacturerId"] is DBNull)) { ManufacturerId = reader.GetInt32("ManufacturerId"); }
             if (!(reader["Price"] is DBNull)) { Price = reader.GetDecimal("Price"); }
             if (!(reader["StockQty"] is DBNull)) { StockQty = reader.GetInt32("StockQty"); }
             if (!(reader["IsPrescription"] is DBNull)) { IsPrescription = reader.GetBoolean("IsPrescription"); }
-            if (reader.FieldCount == 7)
             if (!(reader["Manufacturer"] is DBNull)) { Manufacturer = reader.GetString("Manufacturer"); }
         }
 
         public override bool Remove()
         {
-            throw new NotImplementedException();
+            if (Id < 1) { throw new ArgumentException($"Niedozwolona wartość Id={Id}."); }
+
+            using SqlConnection connection = new SqlConnection();
+            using SqlCommand command = new SqlCommand();
+            command.Connection = connection;
+            command.CommandText = "delete from [Medicines] where Id = @Id";
+            command.Parameters.AddWithValue("@Id", Id).SqlDbType = SqlDbType.Int;
+            DbConnect(connection, dbName);
+            int result = command.ExecuteNonQuery();
+
+            if (result == 1) { return true; }
+            else if (result == 0)
+            {
+                throw new DbResultErrorException($"Nie odnaleziono rekordu o id={Id}.");
+            }
+            else
+            {
+                throw new DbResultErrorException($"Problem integralności danych: Znaleziono i usunięto {result} rekordy/ów o id={Id}");
+            }
         }
 
         public override string ToString()
@@ -139,8 +151,8 @@ namespace ActiveRecord.DataModels
                 $"{"Nazwa",padding}: {Name}\n" +
                 $"{"Dostawca",padding}: {Manufacturer}\n" +
                 $"{"Cena",padding}: {(Price != null ? ((decimal)Price).ToString("#.00") : "Brak danych")}\n" +
-                $"{"Magazyn",padding}: {stockQty}{(stockQty != null ? " szt.": "Brak danych")}\n" +
-                $"{"Recepta",padding}: {(isPrescription != null ? ((bool)isPrescription ? "TAK":"Nie") : "Brak danych")}";
+                $"{"Magazyn",padding}: {StockQty}{(StockQty != null ? " szt.": "Brak danych")}\n" +
+                $"{"Recepta",padding}: {(IsPrescription != null ? ((bool)IsPrescription ? "TAK":"Nie") : "Brak danych")}";
             return output;
         }
     }
