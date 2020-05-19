@@ -7,4 +7,4 @@ W założeniu aplikacja ma obsługiwać aptekę w części magaznowej oraz rejes
 Otwórz plik DbSchema.sql w edytorze Management Studio i wykonaj skrypt. Zostanie utworzona baza z przykładowymi danymi.
 
 ## To jest część pracy
-Aplikacja obsługuje obecnie dwie tabele: leki oraz dostawcy leków.
+Aplikacja obsługuje obecnie tabele: leki, dostawcy leków oraz częściowo recepty.
