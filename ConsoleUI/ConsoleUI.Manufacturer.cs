@@ -39,7 +39,7 @@ namespace ConsoleUI
             {
                 manufacturer.Reload();
             }
-            catch (ArgumentException e) { throw; }
+            catch (ArgumentException) { throw; }
             catch (DbResultErrorException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
             catch (Exception) { ConsoleUI.WriteLine("Nieznany błąd", ConsoleUI.Colors.colorError); throw; }
             return manufacturer;
