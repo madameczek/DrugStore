@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using ActiveRecord.DataModels;
 
 namespace ConsoleUI
@@ -47,7 +48,38 @@ namespace ConsoleUI
             return prescription;
         }
 
-        private static void PrintPrescriptions(int manufacurerId = 0) { }
+        private static void PrintPrescriptions()
+        {
+            List<Prescription> prescriptions;
+            try
+            {
+                prescriptions = Prescription.GetPrescriptions();
+            }
+            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+
+            int paddingName = prescriptions.Max(m => m.CustomerName.Length);
+            int paddingPrescriptionNumber = prescriptions.Max(m => m.PrescriptionNumber.Length);
+            paddingName = Math.Max(paddingName, "Klient".Length);
+            paddingPrescriptionNumber = Math.Max(paddingPrescriptionNumber, "Numer recepty".Length);
+
+            ConsoleUI.WriteLine(new string('-', paddingName + paddingPrescriptionNumber + 18), ConsoleUI.Colors.colorTitleBar);
+            ConsoleUI.Write($"{"Id".PadLeft(4)}|{"Klient".PadRight(paddingName)}|{"PESEL".PadRight(11)}|" +
+                $"{"Numer recepty".PadRight(paddingPrescriptionNumber)}\n", ConsoleUI.Colors.colorTitleBar);
+            ConsoleUI.WriteLine(new string('-', paddingName + paddingPrescriptionNumber + 18), ConsoleUI.Colors.colorTitleBar);
+
+            foreach (Prescription prescription in prescriptions)
+            {
+                Console.Write(prescription.Id.ToString().PadLeft(4));
+                ConsoleUI.Write("|", ConsoleUI.Colors.colorTitleBar);
+                Console.Write(prescription.CustomerName.ToString().PadRight(paddingName));
+                ConsoleUI.Write("|", ConsoleUI.Colors.colorTitleBar);
+                Console.Write(prescription.Pesel);
+                ConsoleUI.Write("|", ConsoleUI.Colors.colorTitleBar);
+                Console.Write(prescription.PrescriptionNumber.ToString().PadRight(paddingPrescriptionNumber));
+                Console.WriteLine();
+            }
+            ConsoleUI.WriteLine(new string('-', paddingName + paddingPrescriptionNumber + 18), ConsoleUI.Colors.colorTitleBar);
+        }
 
         private static void DeletePrescription(int id)
         {

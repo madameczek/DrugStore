@@ -72,6 +72,36 @@ namespace ActiveRecord.DataModels
             ParseReader(reader);
         }
 
+        public static List<Prescription> GetPrescriptions()
+        {
+            List<Prescription> prescriptions = new List<Prescription>();
+            using SqlConnection connection = new SqlConnection();
+            using SqlCommand command = new SqlCommand();
+            command.Connection = connection;
+            command.CommandText = "select * from [Prescriptions]";
+            DbConnect(connection, dbName);
+            SqlDataReader reader = command.ExecuteReader();
+
+            if (!reader.HasRows) { throw new DbResultErrorException($"Lista jest pusta."); }
+
+            while (reader.Read())
+            {
+                Prescription prescription = new Prescription();
+                prescription.ParseReader(reader);
+                prescriptions.Add(prescription);
+            }
+
+            return prescriptions;
+        }
+
+        private void ParseReader(SqlDataReader reader)
+        {
+            Id = reader.GetInt32("Id");
+            if (!(reader["CustomerName"] is DBNull)) { CustomerName = reader.GetString("CustomerName"); }
+            if (!(reader["CustomerPesel"] is DBNull)) { Pesel = reader.GetString("CustomerPesel"); }
+            if (!(reader["PrescriptionNumber"] is DBNull)) { PrescriptionNumber = reader.GetString("PrescriptionNumber"); }
+        }
+
         public override bool Remove()
         {
             if (Id < 1) { throw new ArgumentException($"Niedozwolona wartość Id={Id}."); }
@@ -93,14 +123,6 @@ namespace ActiveRecord.DataModels
             {
                 throw new DbResultErrorException($"Problem integralności danych: Znaleziono i usunięto {result} rekordy/ów o id={Id}");
             }
-        }
-
-        private void ParseReader(SqlDataReader reader)
-        {
-            Id = reader.GetInt32("Id");
-            if (!(reader["CustomerName"] is DBNull)) { CustomerName = reader.GetString("CustomerName"); }
-            if (!(reader["CustomerPesel"] is DBNull)) { Pesel = reader.GetString("CustomerPesel"); }
-            if (!(reader["PrescriptionNumber"] is DBNull)) { PrescriptionNumber = reader.GetString("PrescriptionNumber"); }
         }
 
         public override string ToString()

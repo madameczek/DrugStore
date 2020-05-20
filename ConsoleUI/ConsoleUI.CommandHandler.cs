@@ -158,6 +158,14 @@ namespace ConsoleUI
                         catch (Exception) { }
                         break;
 
+                    case Command.ListPrescriptions:
+                        try
+                        {
+                            PrintPrescriptions();
+                        }
+                        catch (Exception) { }
+                        break;
+
                     case Command.PrintPrescription:
                         try
                         {

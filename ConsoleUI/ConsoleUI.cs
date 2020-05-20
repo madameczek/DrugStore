@@ -62,30 +62,5 @@ namespace ConsoleUI
         {
             Console.WriteLine(text);
         }
-
-        // When using Console.TreatControlCAsInput = true;
-        // standard Console.ReadLine() do not work properly due to MS bug.
-        // Therefore custom Readline() should be developed.
-        // Move to feature branch. It needs some work...
-        public static string ReadLine()
-        {
-            ConsoleKeyInfo cki;
-            StringBuilder sb = new StringBuilder();
-            do
-            {
-                cki = Console.ReadKey();
-                if (cki.Key == ConsoleKey.Backspace)
-                {
-                    sb.Length -= 1;
-                    Console.CursorLeft -= 1;
-                }
-                if (cki.Key == ConsoleKey.Escape)
-                {
-                    return null;
-                }
-                sb.Append(cki.KeyChar);
-            } while (cki.Key != ConsoleKey.Enter);
-            return sb.ToString();
-        }
     }
 }

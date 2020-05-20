@@ -8,7 +8,6 @@ namespace ConsoleUI
 {
     class DatabaseDump
     {
-        public Action<string> printInserts;
         internal void MedicinesDump()
         {
             List<Medicine> medicines;

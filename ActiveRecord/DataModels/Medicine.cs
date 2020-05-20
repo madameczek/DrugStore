@@ -85,7 +85,7 @@ namespace ActiveRecord.DataModels
             command.Connection = connection;
             command.CommandText = "select m.Id, m.Name, m.ManufacturerId, m.Price, m.StockQty, m.IsPrescription, Manufacturers.Name as Manufacturer " +
                 "from [Medicines] as m join Manufacturers on m.ManufacturerId = Manufacturers.id";
-            if (manufacurerId > 0)
+            if (manufacurerId > 0) // Get medicines suppplied by one manufacturer
             {
                 command.CommandText += " where m.ManufacturersId = @ManufacturersId;";
                 command.Parameters.AddWithValue("@ManufacturersId", manufacurerId).SqlDbType = SqlDbType.Int;

@@ -22,10 +22,9 @@ namespace ActiveRecord
             connection.Open();
             return command.ExecuteScalar() != DBNull.Value;
         }
-
         internal static void DbConnect(SqlConnection connection, string dbName)
         {
-            connection.ConnectionString = string.Concat(connectionString, "Initial Catalog=", dbName, ";");
+            connection.ConnectionString = $"{connectionString} Initial Catalog={dbName};";
             connection.Open();
         }
     }
