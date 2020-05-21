@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using ActiveRecord.DataModels;
 
@@ -32,7 +31,7 @@ namespace ConsoleUI
             {
                 PrintResultOK(medicine.Save());
             }
-            catch (DbResultErrorException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+            catch (DbResultException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
             catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
         }
 
@@ -43,8 +42,7 @@ namespace ConsoleUI
             {
                 medicine.Reload();
             }
-            catch (ArgumentException) { throw; }
-            catch (DbResultErrorException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+            catch (DbResultException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
             catch (Exception) { ConsoleUI.WriteLine("Nieznany błąd", ConsoleUI.Colors.colorError); throw; }
             return medicine;
         }
@@ -98,15 +96,18 @@ namespace ConsoleUI
             {
                 PrintResultOK(new Medicine(id).Remove());
             }
-            catch (ArgumentException) { throw; }
-            catch (DbResultErrorException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
+            catch (DbResultException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
             catch (Exception e)
             {
                 if (e.Message.Contains("FK_OrderDetails_Medicines"))
-                {
-                    ConsoleUI.WriteLine("Nie można usunąć leku, bo istnieją w bazie powiązane recepty", ConsoleUI.Colors.colorError);
+                { 
+                    ConsoleUI.WriteLine("Nie można usunąć leku, bo istnieją w bazie powiązane recepty", ConsoleUI.Colors.colorError); 
                 }
-                else { ConsoleUI.WriteLine(e.Message + "Wystąpił nieznany błąd", ConsoleUI.Colors.colorError); }
+                else 
+                { 
+                    ConsoleUI.WriteLine(e.Message + "Wystąpił nieznany błąd", ConsoleUI.Colors.colorError); 
+                }
+                throw;
             }
         }
     }

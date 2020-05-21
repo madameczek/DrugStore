@@ -64,12 +64,10 @@ namespace ConsoleUI
                             {
                                 manufacturer.Reload();
                             }
-                            catch (ArgumentException) { throw; }
                             catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
                             manufacturer = GetManufacturerDetails(id);
                             AddOrUpdateManufacturer(manufacturer);
                         }
-                        catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }
                         break;
 
@@ -79,7 +77,6 @@ namespace ConsoleUI
                             Manufacturer manufacturer = ReloadManufacturer(ConsoleUI.GetId("Podaj Id dostawcy"));
                             Console.WriteLine(manufacturer);
                         }
-                        catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }
                         break;
 
@@ -98,7 +95,6 @@ namespace ConsoleUI
                         {
                             DeleteManufacturer(ConsoleUI.GetId("Podaj Id dostawcy, który ma być usunięty"));
                         }
-                        catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }
                         break;
 
@@ -119,12 +115,10 @@ namespace ConsoleUI
                             {
                                 medicine.Reload();
                             }
-                            catch (ArgumentException) { throw; }
                             catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
                             medicine = GetMedicineDetails(id);
                             AddOrUpdateMedicine(medicine);
                         }
-                        catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }
                         break;
 
@@ -134,7 +128,6 @@ namespace ConsoleUI
                             Medicine medicine = ReloadMedicine(ConsoleUI.GetId("Podaj Id leku"));
                             Console.WriteLine(medicine);
                         }
-                        catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }
                         break;
 
@@ -154,7 +147,6 @@ namespace ConsoleUI
                         {
                             DeleteMedicine(ConsoleUI.GetId("Podaj Id leku, który ma być usunięty"));
                         }
-                        catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }
                         break;
 
@@ -172,7 +164,6 @@ namespace ConsoleUI
                             Prescription prescription = ReloadPrescription(ConsoleUI.GetId("Podaj Id recepty"));
                             Console.WriteLine(prescription);
                         }
-                        catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }
                         break;
 
@@ -185,12 +176,10 @@ namespace ConsoleUI
                             {
                                 prescription.Reload();
                             }
-                            catch (ArgumentException) { throw; }
                             catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
                             prescription = GetPrescriptionDetails(id);
                             AddOrUpdatePrescription(prescription);
                         }
-                        catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }
                         break;
 
@@ -210,23 +199,29 @@ namespace ConsoleUI
                         {
                             DeletePrescription(ConsoleUI.GetId("Podaj Id recepty, która ma być usunięta"));
                         }
-                        catch (ArgumentException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         catch (Exception) { }
                         break;
 
-
-                    
-
                     case Command.AddOrder:
-                        goto default;
+                        try
+                        {
+                            Order order = new Order();
+                            PrintResultOK(order.Save());
+                            order.Reload();
+                            Console.WriteLine(order);
+                        }
+                        catch (Exception) { }
                         break;
+
                     case Command.DeleteOrder:
+
                         goto default;
                         break;
                     case Command.AddOrderItem:
                         goto default;
                         break;
                     case Command.DeleteOrderItem:
+
                         goto default;
                         break;
                     case Command.exit:
@@ -243,24 +238,28 @@ namespace ConsoleUI
         }
 
         /// <summary>
-        /// Returns integer
+        /// Returns int from console input
         /// </summary>
         /// <param name="prompt"></param>
-        /// <returns></returns>
-        static int GetId(string prompt)
+        /// <returns>Returns int</returns>
+        /// <exception cref="FormatException"></exception>
+        private static int GetId(string prompt)
         {
             if (int.TryParse(ConsoleUI.GetString(prompt), out int id))
             {
                 return id;
             }
-            throw new ArgumentException("Nie rozpoznano liczby.");
+            ConsoleUI.WriteLine("Nie rozpoznano liczby.", ConsoleUI.Colors.colorError);
+            throw new FormatException("Nie rozpoznano liczby.");
         }
 
         /// <summary>
-        /// Returns Id of existing Manufacturer or throws ArgumentException
+        /// Returns Id of existing Manufacturer
         /// </summary>
         /// <param name="prompt"></param>
-        /// <returns></returns>
+        /// <returns>Returns Id of existing Manufacturer</returns>
+        /// <exception cref="FormatException"></exception>
+        /// <exception cref="DbResultException"></exception>
         static int GetExistingId(string prompt)
         {
             int id;
@@ -270,32 +269,33 @@ namespace ConsoleUI
                 Manufacturer manufacturer = new Manufacturer(id);
                 manufacturer.Reload();
             }
-            catch (ArgumentException) { throw; }
-            catch (Exception) { throw; }
+            catch (FormatException) { throw; }
+            catch (DbResultException) { throw; }
             return id;
         }
 
         /// <summary>
-        /// Returns decimal in return to string input from console
+        /// Returns decimal from console input
         /// Throws Exception on parse rerror
         /// </summary>
         /// <param name="prompt"></param>
-        /// <returns></returns>
+        /// <returns>Returns decimal</returns>
+        /// <exception cref="FormatException"></exception>
         static decimal? GetDecimal(string prompt)
         {
             string stringToParse = ConsoleUI.GetString(prompt);
             if (string.IsNullOrEmpty(stringToParse)) { return null; }
             bool isResult = Decimal.TryParse(stringToParse, out decimal number);
             if (isResult) { return number; }
-            throw new Exception("Nie rozpoznano liczby.");
+            throw new FormatException("Nie rozpoznano liczby.");
         }
 
         /// <summary>
-        /// Returns bool in return to string input from console
-        /// Throws Exception on parse rerror
+        /// Returns bool? from console input
         /// </summary>
         /// <param name="prompt"></param>
         /// <returns></returns>
+        /// <exception cref="FormatException"></exception>
         static bool? GetBool(string prompt)
         {
             string stringToParse = ConsoleUI.GetString(prompt);
@@ -310,9 +310,13 @@ namespace ConsoleUI
             {
                 if (item == stringToParse.ToLower().Trim()) { return false; }
             }
-            throw new Exception("Nie rozpoznano odpowiedzi.");
+            throw new FormatException("Nie rozpoznano odpowiedzi.");
         }
 
+        /// <summary>
+        /// Prints message on console
+        /// </summary>
+        /// <param name="result"></param>
         static void PrintResultOK(bool result)
         {
             if (result) { ConsoleUI.WriteLine("Operacja wykonana poprawnie", ConsoleUI.Colors.colorSuccesss); }

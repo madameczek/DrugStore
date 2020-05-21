@@ -4,8 +4,8 @@ using System.Text;
 
 namespace ActiveRecord.DataModels
 {
-    public class DbResultErrorException : Exception
+    public class DbResultException : Exception
     {
-        public DbResultErrorException(string message) : base(message) { }
+        public DbResultException(string message) : base(message) { }
     }
 }

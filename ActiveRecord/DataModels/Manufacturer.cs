@@ -50,18 +50,13 @@ namespace ActiveRecord.DataModels
                     "where Id = @id";
                 int result = command.ExecuteNonQuery();
                 if (result == 1) { return true; }
-                else
-                {
-                    throw new DbResultErrorException($"Nie odnaleziono rekordu o Id={Id}.");
-                }
+                else { throw new DbResultException($"Nie odnaleziono rekordu o Id={Id}."); }
             }
             return false;
         }
 
         public override void Reload()
         {
-            if (Id < 1) { throw new ArgumentException($"Niedozwolona wartość Id={Id}."); }
-
             using SqlConnection connection = new SqlConnection();
             using SqlCommand command = new SqlCommand();
             command.Connection = connection;
@@ -70,7 +65,7 @@ namespace ActiveRecord.DataModels
             DbConnect(connection, dbName);
             SqlDataReader reader = command.ExecuteReader();
             
-            if (!reader.HasRows) { throw new DbResultErrorException($"Nie odnaleziono rekordu o id={Id}."); }
+            if (!reader.HasRows) { throw new DbResultException($"Nie odnaleziono rekordu o id={Id}."); }
             
             _ = reader.Read();
             ParseReader(reader);
@@ -86,7 +81,7 @@ namespace ActiveRecord.DataModels
             DbConnect(connection, dbName);
             SqlDataReader reader = command.ExecuteReader();
 
-            if (!reader.HasRows) { throw new DbResultErrorException($"Lista jest pusta."); }
+            if (!reader.HasRows) { throw new DbResultException($"Lista jest pusta."); }
 
             while (reader.Read())
             {
@@ -109,8 +104,6 @@ namespace ActiveRecord.DataModels
 
         public override bool Remove()
         {
-            if (Id < 1) { throw new ArgumentException($"Niedozwolona wartość Id={Id}."); }
-
             using SqlConnection connection = new SqlConnection();
             using SqlCommand command = new SqlCommand();
             command.Connection = connection;
@@ -120,11 +113,7 @@ namespace ActiveRecord.DataModels
             int result = command.ExecuteNonQuery();
 
             if (result == 1) { return true; }
-            else
-            {
-                throw new DbResultErrorException($"Nie odnaleziono rekordu o id={Id}.");
-            }
-            
+            else { throw new DbResultException($"Nie odnaleziono rekordu o id={Id}."); }
         }
 
         public override string ToString()

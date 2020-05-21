@@ -28,7 +28,7 @@ namespace ConsoleUI
             {
                 PrintResultOK(manufacturer.Save());
             }
-            catch (DbResultErrorException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+            catch (DbResultException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
             catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
         }
 
@@ -39,8 +39,7 @@ namespace ConsoleUI
             {
                 manufacturer.Reload();
             }
-            catch (ArgumentException) { throw; }
-            catch (DbResultErrorException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+            catch (DbResultException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
             catch (Exception) { ConsoleUI.WriteLine("Nieznany błąd", ConsoleUI.Colors.colorError); throw; }
             return manufacturer;
         }
@@ -90,15 +89,22 @@ namespace ConsoleUI
             {
                 PrintResultOK(new Manufacturer(id).Remove());
             }
-            catch (ArgumentException) { throw; }
-            catch (DbResultErrorException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
+            catch (DbResultException e) 
+            { 
+                ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); 
+                throw; 
+            }
             catch (Exception e)
             {
                 if (e.Message.Contains("FK_Medicines_Manufacturers"))
                 {
                     ConsoleUI.WriteLine("Nie można usunąć dostawcy, bo istnieją w bazie powiązane produkty", ConsoleUI.Colors.colorError);
                 }
-                else { ConsoleUI.WriteLine(e.Message + "Wystąpił nieznany błąd", ConsoleUI.Colors.colorError); }
+                else 
+                { 
+                    ConsoleUI.WriteLine(e.Message + "Wystąpił nieznany błąd", ConsoleUI.Colors.colorError); 
+                }
+                throw;
             }
         }
     }
