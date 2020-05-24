@@ -12,10 +12,12 @@ namespace ConsoleUI
 
         private readonly List<MenuItem> items = new List<MenuItem>
         {
-            new MenuItem(ConsoleKey.D5, Command.AddOrder, "Dodaj zamówienie"),
-            new MenuItem(ConsoleKey.D6, Command.AddOrderItem, "Dodaj pozycję zamówienia"),
-            new MenuItem(ConsoleKey.D7, Command.DeleteOrderItem, "Usuń pozycję zamówienia"),
-            new MenuItem(ConsoleKey.D8, Command.DeleteOrder, "Usuń zamówienie"),
+            new MenuItem(ConsoleKey.D1, Command.ListOrdersById, "Lista zamówień"),
+            new MenuItem(ConsoleKey.D2, Command.PrintOrder, "Pokaż szczegóły zamówienia"),
+            new MenuItem(ConsoleKey.D3, Command.UpdateOrder, "Edytuj zamówienie"),
+            new MenuItem(ConsoleKey.D4, Command.AddOrder, "Dodaj zamówienie"),
+            //new MenuItem(ConsoleKey.D5, Command.DeleteOrder, "Usuń zamówienie"),
+            new MenuItem(ConsoleKey.D6, Command.DeliverOrder, "Realizuj zamówienie"),
             new MenuItem(ConsoleKey.Escape, Command.exit, "Esc", "Poprzednie menu")
         };
 

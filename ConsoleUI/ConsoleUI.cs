@@ -37,6 +37,65 @@ namespace ConsoleUI
             return output;
         }
 
+        /// <summary>
+        /// Returns int from console input
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <returns>Returns int</returns>
+        /// <exception cref="FormatException"></exception>
+        private static int GetInt(string prompt)
+        {
+            if (int.TryParse(ConsoleUI.GetString(prompt), out int id))
+            {
+                return id;
+            }
+            throw new FormatException("Nie rozpoznano liczby.");
+        }
+
+        /// <summary>
+        /// Returns decimal from console input
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <returns>Returns decimal</returns>
+        /// <exception cref="FormatException"></exception>
+        static decimal? GetDecimal(string prompt)
+        {
+            string stringToParse = ConsoleUI.GetString(prompt);
+            if (string.IsNullOrEmpty(stringToParse)) { return null; }
+            bool isResult = Decimal.TryParse(stringToParse, out decimal number);
+            if (isResult) { return number; }
+            throw new FormatException("Nie rozpoznano liczby.");
+        }
+
+        /// <summary>
+        /// Returns bool? from console input.
+        /// If parameter trueOnEmpty = true and ipmut string is empty, then returns true (shortcut for true).
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <param name="trueOnEmpty"></param>
+        /// <returns></returns>
+        /// <exception cref="FormatException"></exception>
+        static bool? GetBool(string prompt, bool trueOnEmpty = false)
+        {
+            string stringToParse = ConsoleUI.GetString(prompt);
+            string[] yes = { "yes", "y", "tak", "t", " true" };
+            string[] no = { "no", "n", "nie", "false", "f" };
+            if (string.IsNullOrEmpty(stringToParse))
+            {
+                if (trueOnEmpty) { return true; }
+                else { return null; }
+            }
+            foreach (string item in yes)
+            {
+                if (item == stringToParse.ToLower().Trim()) { return true; }
+            }
+            foreach (string item in no)
+            {
+                if (item == stringToParse.ToLower().Trim()) { return false; }
+            }
+            throw new FormatException("Nie rozpoznano odpowiedzi.");
+        }
+
         public static void Write(string text, ConsoleColor color)
         {
             ConsoleColor saveConsoleColor = Console.ForegroundColor;

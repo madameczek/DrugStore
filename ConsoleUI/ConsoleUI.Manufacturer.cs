@@ -28,8 +28,7 @@ namespace ConsoleUI
             {
                 PrintResultOK(manufacturer.Save());
             }
-            catch (DbResultException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
-            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+            catch (Exception) { throw; }
         }
 
         private static Manufacturer ReloadManufacturer(int id)
@@ -39,8 +38,8 @@ namespace ConsoleUI
             {
                 manufacturer.Reload();
             }
-            catch (DbResultException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
-            catch (Exception) { ConsoleUI.WriteLine("Nieznany błąd", ConsoleUI.Colors.colorError); throw; }
+            catch (DbResultException) { throw; }
+            catch (Exception) { throw new Exception("Nieznany błąd"); }
             return manufacturer;
         }
 
@@ -51,7 +50,7 @@ namespace ConsoleUI
             {
                 manufacturers = Manufacturer.GetManufacturers();
             }
-            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+            catch (Exception) { throw; }
 
             int paddingName = manufacturers.Max(m => m.Name.Length);
             int paddingAddress = manufacturers.Max(m => m.Address.Length);
@@ -89,22 +88,17 @@ namespace ConsoleUI
             {
                 PrintResultOK(new Manufacturer(id).Remove());
             }
-            catch (DbResultException e) 
-            { 
-                ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); 
-                throw; 
-            }
+            catch (DbResultException) { throw; }
             catch (Exception e)
             {
                 if (e.Message.Contains("FK_Medicines_Manufacturers"))
                 {
-                    ConsoleUI.WriteLine("Nie można usunąć dostawcy, bo istnieją w bazie powiązane produkty", ConsoleUI.Colors.colorError);
+                    throw new Exception("Nie można usunąć dostawcy, bo istnieją w bazie powiązane produkty");
                 }
                 else 
                 { 
-                    ConsoleUI.WriteLine(e.Message + "Wystąpił nieznany błąd", ConsoleUI.Colors.colorError); 
+                    throw new Exception("Wystąpił błąd: "+ e.Message);
                 }
-                throw;
             }
         }
     }

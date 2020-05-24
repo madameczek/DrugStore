@@ -16,12 +16,12 @@ namespace ConsoleUI
             try
             {
                 medicine.Name = GetNotEmptyString("Podaj nazwę leku");
-                medicine.ManufacturerId = GetExistingId("Podaj Id dostawcy (musi być w bazie)");
+                medicine.ManufacturerId = GetExistingManufacturerId("Podaj Id dostawcy (musi być w bazie)");
                 medicine.Price = GetDecimal("Podaj cenę ([Enter] by nie wprowadzać)");
                 medicine.IsPrescription = GetBool("Czy lek jest na receptę? [Enter] by nie wprowadzać");
                 medicine.StockQty = (int?)GetDecimal("Podaj stan magazynowy [Enter] by nie wprowadzać");
             }
-            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+            catch (Exception) { throw; }
             return medicine;
         }
 
@@ -31,8 +31,7 @@ namespace ConsoleUI
             {
                 PrintResultOK(medicine.Save());
             }
-            catch (DbResultException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
-            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+            catch (Exception) { throw; }
         }
 
         private static Medicine ReloadMedicine(int id)
@@ -42,8 +41,8 @@ namespace ConsoleUI
             {
                 medicine.Reload();
             }
-            catch (DbResultException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
-            catch (Exception) { ConsoleUI.WriteLine("Nieznany błąd", ConsoleUI.Colors.colorError); throw; }
+            catch (DbResultException) { throw; }
+            catch (Exception) { throw new Exception("Nieznany błąd"); }
             return medicine;
         }
 
@@ -54,7 +53,7 @@ namespace ConsoleUI
             {
                 medicines = Medicine.GetMedicines(manufacurerId);
             }
-            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+            catch (Exception) { throw; }
 
             int paddingName = medicines.Max(m => m.Name.Length);
             int paddingManufacturer = medicines.Max(m => m.Manufacturer.ToString().Length);
@@ -96,16 +95,16 @@ namespace ConsoleUI
             {
                 PrintResultOK(new Medicine(id).Remove());
             }
-            catch (DbResultException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+            catch (DbResultException) { throw; }
             catch (Exception e)
             {
                 if (e.Message.Contains("FK_OrderDetails_Medicines"))
                 { 
-                    ConsoleUI.WriteLine("Nie można usunąć leku, bo istnieją w bazie powiązane recepty", ConsoleUI.Colors.colorError); 
+                    throw new Exception("Nie można usunąć leku, bo istnieją w bazie powiązane recepty"); 
                 }
                 else 
                 { 
-                    ConsoleUI.WriteLine(e.Message + "Wystąpił nieznany błąd", ConsoleUI.Colors.colorError); 
+                    throw new Exception("Wystąpił błąd: " + e.Message);
                 }
                 throw;
             }

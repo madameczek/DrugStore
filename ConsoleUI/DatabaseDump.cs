@@ -13,7 +13,7 @@ namespace ConsoleUI
             List<Medicine> medicines;
             try
             {
-                medicines = Medicine.GetMedicines(0);
+                medicines = Medicine.GetMedicines();
                 File.Delete("Medicines.txt");
             }
             catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }

@@ -30,14 +30,17 @@ namespace ConsoleUI
         AddPrescription,
         DeletePrescription,
 
-        ListOrderById = 41,
-        ListOrderByName,
-        ListOrderByPesel,
+        ListOrdersById = 41,
+        ListOrdersByPesel,
+        UpdateOrder,
         PrintOrder,
+        DeliverOrder,
         AddOrder,
+        DeleteOrder,
+
+        ListOrderItems = 51,
         AddOrderItem,
         DeleteOrderItem,
-        DeleteOrder,
 
         exit = 0
     }

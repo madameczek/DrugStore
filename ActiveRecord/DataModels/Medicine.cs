@@ -45,8 +45,8 @@ namespace ActiveRecord.DataModels
             }
             if (Id > 0)
             {
-                command.CommandText = "update [Medicines] set Name = @Name, " +
-                    "ManufacturerId = @ManufacturerId, Price = @Price, StockQty = @StockQty, IsPrescription = @IsPrescription " +
+                command.CommandText = "update [Medicines] set Name = @Name, ManufacturerId = @ManufacturerId, " +
+                    "Price = @Price, StockQty = @StockQty, IsPrescription = @IsPrescription " +
                     "where Id = @id";
                 int result = command.ExecuteNonQuery();
                 if (result == 1) { return true; }
@@ -70,7 +70,13 @@ namespace ActiveRecord.DataModels
             ParseReader(reader);
         }
 
-        public static List<Medicine> GetMedicines(int manufacurerId)
+        /// <summary>
+        /// Returns list of Medicine objects. If parameter is given (>0) then lists medicines associated with manufacurerId
+        /// </summary>
+        /// <param name="manufacurerId"></param>
+        /// <returns></returns>
+        /// <exception cref="DbResultException"></exception>
+        public static List<Medicine> GetMedicines(int manufacurerId = 0)
         {
             List<Medicine> medicines = new List<Medicine>();
             using SqlConnection connection = new SqlConnection();
@@ -80,8 +86,8 @@ namespace ActiveRecord.DataModels
                 "from [Medicines] as m join Manufacturers on m.ManufacturerId = Manufacturers.id";
             if (manufacurerId > 0) // Get medicines suppplied by one manufacturer
             {
-                command.CommandText += " where m.ManufacturersId = @ManufacturersId;";
-                command.Parameters.AddWithValue("@ManufacturersId", manufacurerId).SqlDbType = SqlDbType.Int;
+                command.CommandText += " where m.ManufacturerId = @ManufacturerId;";
+                command.Parameters.AddWithValue("@ManufacturerId", manufacurerId).SqlDbType = SqlDbType.Int;
             }
             DbConnect(connection, dbName);
             SqlDataReader reader = command.ExecuteReader();

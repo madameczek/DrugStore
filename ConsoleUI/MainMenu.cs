@@ -15,7 +15,7 @@ namespace ConsoleUI
         {
             new MenuItem(ConsoleKey.D1, Command.InventoryMenu, "Zarządzaj lekami"),
             new MenuItem(ConsoleKey.D2, Command.ManufacturerMenu, "Zarządzaj dostawcami"),
-            new MenuItem(ConsoleKey.D3, Command.PrescriptionMenu, "Recepty"),
+            //new MenuItem(ConsoleKey.D3, Command.PrescriptionMenu, "Recepty"),
             new MenuItem(ConsoleKey.D4, Command.OrderMenu, "Zamówienia"),
             new MenuItem(ConsoleKey.Escape, Command.exit, "Esc", "Wyjście z programu")
         };

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace ConsoleUI
 {
@@ -58,26 +59,30 @@ namespace ConsoleUI
                     case Command.UpdateManufacturer:
                         try
                         {
-                            int id = ConsoleUI.GetId("Podaj nr dostawcy, którego dane będą poprawiane");
+                            int id = ConsoleUI.GetInt("Podaj nr dostawcy, którego dane będą poprawiane");
                             Manufacturer manufacturer = new Manufacturer(id);
                             try
                             {
                                 manufacturer.Reload();
                             }
-                            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+                            catch (Exception) { throw; }
                             manufacturer = GetManufacturerDetails(id);
                             AddOrUpdateManufacturer(manufacturer);
                         }
-                        catch (Exception) { }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.PrintManufacturer:
                         try
                         {
-                            Manufacturer manufacturer = ReloadManufacturer(ConsoleUI.GetId("Podaj Id dostawcy"));
+                            Manufacturer manufacturer = ReloadManufacturer(ConsoleUI.GetInt("Podaj Id dostawcy"));
                             Console.WriteLine(manufacturer);
+                            if ((bool)GetBool("Czy pokazać leki tego dostawcy? ([Enter] = tak)", true))
+                            {
+                                PrintMedicines(manufacturer.Id);
+                            }
                         }
-                        catch (Exception) { }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.AddManufacturer:
@@ -87,15 +92,15 @@ namespace ConsoleUI
                             AddOrUpdateManufacturer(manufacturer);
                             Console.WriteLine(manufacturer);
                         }
-                        catch (Exception) { }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.DeleteManufacturer:
                         try
                         {
-                            DeleteManufacturer(ConsoleUI.GetId("Podaj Id dostawcy, który ma być usunięty"));
+                            DeleteManufacturer(ConsoleUI.GetInt("Podaj Id dostawcy, który ma być usunięty"));
                         }
-                        catch (Exception) { }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.ListMedicines:
@@ -103,32 +108,32 @@ namespace ConsoleUI
                         {
                             PrintMedicines();
                         }
-                        catch (Exception) { }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.UpdateMedicine:
                         try
                         {
-                            int id = ConsoleUI.GetId("Podaj nr leku, którego dane będą poprawiane");
+                            int id = ConsoleUI.GetInt("Podaj nr leku, którego dane będą poprawiane");
                             Medicine medicine = new Medicine(id);
                             try
                             {
                                 medicine.Reload();
                             }
-                            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+                            catch (Exception) { throw; }
                             medicine = GetMedicineDetails(id);
                             AddOrUpdateMedicine(medicine);
                         }
-                        catch (Exception) { }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.PrintMedicine:
                         try
                         {
-                            Medicine medicine = ReloadMedicine(ConsoleUI.GetId("Podaj Id leku"));
+                            Medicine medicine = ReloadMedicine(ConsoleUI.GetInt("Podaj Id leku"));
                             Console.WriteLine(medicine);
                         }
-                        catch (Exception) { }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.AddMedicine:
@@ -139,15 +144,15 @@ namespace ConsoleUI
                             medicine.Reload();
                             Console.WriteLine(medicine);
                         }
-                        catch (Exception) { }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.DeleteMedicine:
                         try
                         {
-                            DeleteMedicine(ConsoleUI.GetId("Podaj Id leku, który ma być usunięty"));
+                            DeleteMedicine(ConsoleUI.GetInt("Podaj Id leku, który ma być usunięty"));
                         }
-                        catch (Exception) { }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.ListPrescriptions:
@@ -155,32 +160,32 @@ namespace ConsoleUI
                         {
                             PrintPrescriptions();
                         }
-                        catch (Exception) { }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.PrintPrescription:
                         try
                         {
-                            Prescription prescription = ReloadPrescription(ConsoleUI.GetId("Podaj Id recepty"));
+                            Prescription prescription = ReloadPrescription(ConsoleUI.GetInt("Podaj Id recepty"));
                             Console.WriteLine(prescription);
                         }
-                        catch (Exception) { }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.UpdatePresctiption:
                         try
                         {
-                            int id = ConsoleUI.GetId("Podaj nr recepty, która będzie poprawiana");
+                            int id = ConsoleUI.GetInt("Podaj nr recepty, która będzie poprawiana");
                             Prescription prescription = new Prescription(id);
                             try
                             {
                                 prescription.Reload();
                             }
-                            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+                            catch (Exception) { throw; }
                             prescription = GetPrescriptionDetails(id);
                             AddOrUpdatePrescription(prescription);
                         }
-                        catch (Exception) { }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.AddPrescription:
@@ -191,15 +196,46 @@ namespace ConsoleUI
                             prescription.Reload();
                             Console.WriteLine(prescription);
                         }
-                        catch (Exception) { }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.DeletePrescription:
                         try
                         {
-                            DeletePrescription(ConsoleUI.GetId("Podaj Id recepty, która ma być usunięta"));
+                            DeletePrescription(ConsoleUI.GetInt("Podaj Id recepty, która ma być usunięta"));
+                        }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
+                        break;
+
+                    case Command.ListOrdersById:
+                        try
+                        {
+                            bool isOpen = (bool)GetBool("Czy pokazać tylko nie zrealizowane zamówienia? ([t|n], [Enter] = tak)", true);
+                            PrintOrders(isOpen);
                         }
                         catch (Exception) { }
+                        break;
+
+                    case Command.PrintOrder:
+                        try
+                        {
+                            orderId = GetInt("Podaj numer zamówienia");
+                            PrintOrderItems(orderId);
+                            MenuBuilder orderItemMenu = new OrderItemMenu();
+                            Run(orderItemMenu);
+                        }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
+                        break;
+
+                    case Command.UpdateOrder:
+                        try
+                        {
+                            orderId = GetInt("Podaj numer zamówienia");
+                            PrintOrderItems(orderId);
+                            MenuBuilder orderItemMenu = new OrderItemMenu();
+                            Run(orderItemMenu);
+                        }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.AddOrder:
@@ -207,23 +243,77 @@ namespace ConsoleUI
                         {
                             Order order = new Order();
                             PrintResultOK(order.Save());
-                            order.Reload();
-                            Console.WriteLine(order);
+                            orderId = order.Id;
+                            MenuBuilder orderItemMenu = new OrderItemMenu();
+                            Run(orderItemMenu);
                         }
-                        catch (Exception) { }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
 
                     case Command.DeleteOrder:
-
                         goto default;
+
+                    case Command.DeliverOrder:
+                        try
+                        {
+                            orderId = GetInt("Podaj numer zamówienia");
+                            PrintOrderItems(orderId);
+                            PrintResultOK(DeliverOrder(orderId));
+                            PrintOrderItems(orderId);
+                        }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
+
+                    case Command.ListOrderItems:
+                        try
+                        {
+                            PrintOrderItems(orderId);
+                        }
+                        catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
+                        break;
+
                     case Command.AddOrderItem:
-                        goto default;
+                        try
+                        {
+                            OrderItem orderItem;
+                            orderItem = GetOrderItemDetails(orderId);
+                            PrintResultOK(orderItem.Save());
+                            orderItem.Reload();
+                        }
+                        catch (Exception e)
+                        { 
+                            if (e.Message.Contains("FK_OrderItems_Orders"))
+                            {
+                                ConsoleUI.WriteLine("Zamówienie zawiera już ten lek", ConsoleUI.Colors.colorError);
+                            }
+                            else
+                            {
+                                ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError);
+                            }
+                        }
                         break;
-                    case Command.DeleteOrderItem:
 
-                        goto default;
+                    case Command.DeleteOrderItem:
+                        try
+                        {
+                            int orderItemId = GetInt("Podaj Id pozycji zamówienia");
+                            OrderItem orderItem = new OrderItem(orderItemId);
+                            orderItem.Reload();
+                            if(orderItem.DeliveredOn == null)
+                            {
+                                orderItem.Remove();
+                            }
+                            else
+                            {
+                                ConsoleUI.WriteLine("Nie można usunąć z zamówienia leku, który został wydany", ConsoleUI.Colors.colorError);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError);
+                        }
                         break;
+
                     case Command.exit:
                         /*DatabaseDump dd = new DatabaseDump();
                         dd.MedicinesDump();
@@ -238,34 +328,18 @@ namespace ConsoleUI
         }
 
         /// <summary>
-        /// Returns int from console input
-        /// </summary>
-        /// <param name="prompt"></param>
-        /// <returns>Returns int</returns>
-        /// <exception cref="FormatException"></exception>
-        private static int GetId(string prompt)
-        {
-            if (int.TryParse(ConsoleUI.GetString(prompt), out int id))
-            {
-                return id;
-            }
-            ConsoleUI.WriteLine("Nie rozpoznano liczby.", ConsoleUI.Colors.colorError);
-            throw new FormatException("Nie rozpoznano liczby.");
-        }
-
-        /// <summary>
         /// Returns Id of existing Manufacturer
         /// </summary>
         /// <param name="prompt"></param>
         /// <returns>Returns Id of existing Manufacturer</returns>
         /// <exception cref="FormatException"></exception>
         /// <exception cref="DbResultException"></exception>
-        static int GetExistingId(string prompt)
+        static int GetExistingManufacturerId(string prompt)
         {
             int id;
             try
             {
-                id = GetId(prompt);
+                id = GetInt(prompt);
                 Manufacturer manufacturer = new Manufacturer(id);
                 manufacturer.Reload();
             }
@@ -275,42 +349,24 @@ namespace ConsoleUI
         }
 
         /// <summary>
-        /// Returns decimal from console input
-        /// Throws Exception on parse rerror
+        /// Returns Id of existing Medicine
         /// </summary>
         /// <param name="prompt"></param>
-        /// <returns>Returns decimal</returns>
+        /// <returns>Returns Id of existing Medicine</returns>
         /// <exception cref="FormatException"></exception>
-        static decimal? GetDecimal(string prompt)
+        /// <exception cref="DbResultException"></exception>
+        static int GetExistingMedicineId(string prompt)
         {
-            string stringToParse = ConsoleUI.GetString(prompt);
-            if (string.IsNullOrEmpty(stringToParse)) { return null; }
-            bool isResult = Decimal.TryParse(stringToParse, out decimal number);
-            if (isResult) { return number; }
-            throw new FormatException("Nie rozpoznano liczby.");
-        }
-
-        /// <summary>
-        /// Returns bool? from console input
-        /// </summary>
-        /// <param name="prompt"></param>
-        /// <returns></returns>
-        /// <exception cref="FormatException"></exception>
-        static bool? GetBool(string prompt)
-        {
-            string stringToParse = ConsoleUI.GetString(prompt);
-            string[] yes = { "yes", "y", "tak", "t", " true"};
-            string[] no = { "no", "n", "nie", "false", "f" };
-            if (string.IsNullOrEmpty(stringToParse)) { return null; }
-            foreach (string item in yes)
+            int id;
+            try
             {
-                if (item == stringToParse.ToLower().Trim()) { return true; }
+                id = GetInt(prompt);
+                Medicine medicine = new Medicine(id);
+                medicine.Reload();
             }
-            foreach (string item in no)
-            {
-                if (item == stringToParse.ToLower().Trim()) { return false; }
-            }
-            throw new FormatException("Nie rozpoznano odpowiedzi.");
+            catch (FormatException) { throw; }
+            catch (DbResultException) { throw; }
+            return id;
         }
 
         /// <summary>

@@ -18,7 +18,7 @@ namespace ConsoleUI
             string pesel;
             do
             {
-                pesel = GetNotEmptyString("Podaj PESEL");
+                pesel = GetNotEmptyString("Podaj PESEL (może być 11 zer)");
             } while (!PeselChecker.Verify(pesel));
             prescription.Pesel = pesel;
             prescription.PrescriptionNumber = GetNotEmptyString("Podaj numer recepty");
@@ -31,8 +31,7 @@ namespace ConsoleUI
             {
                 PrintResultOK(prescription.Save());
             }
-            catch (DbResultException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
-            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+            catch (Exception) { throw; }
         }
 
         private static Prescription ReloadPrescription(int id)
@@ -42,8 +41,8 @@ namespace ConsoleUI
             {
                 prescription.Reload();
             }
-            catch (DbResultException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
-            catch (Exception) { ConsoleUI.WriteLine("Nieznany błąd", ConsoleUI.Colors.colorError); throw; }
+            catch (DbResultException) { throw; }
+            catch (Exception) { throw new Exception("Nieznany błąd"); }
             return prescription;
         }
 
@@ -54,7 +53,7 @@ namespace ConsoleUI
             {
                 prescriptions = Prescription.GetPrescriptions();
             }
-            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+            catch (Exception) { throw; }
 
             int paddingName = prescriptions.Max(m => m.CustomerName.Length);
             int paddingPrescriptionNumber = prescriptions.Max(m => m.PrescriptionNumber.Length);
@@ -86,14 +85,17 @@ namespace ConsoleUI
             {
                 PrintResultOK(new Prescription(id).Remove());
             }
-            catch (DbResultException e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
+            catch (DbResultException) { throw; }
             catch (Exception e)
             {
                 if (e.Message.Contains("FK_OrderDetails_Prescriptions"))
                 {
-                    ConsoleUI.WriteLine("Nie można usunąć recepty, bo istnieją w bazie zamówienia na leki z tej recepty. Najpierw usuń leki z zamówienia", ConsoleUI.Colors.colorError);
+                    throw new Exception("Nie można usunąć recepty, bo istnieją w bazie zamówienia na leki z tej recepty. Najpierw usuń leki z zamówienia");
                 }
-                else { ConsoleUI.WriteLine(e.Message + "Wystąpił nieznany błąd", ConsoleUI.Colors.colorError); }
+                else
+                {
+                    throw new Exception("Wystąpił błąd: " + e.Message);
+                }
             }
         }
     }

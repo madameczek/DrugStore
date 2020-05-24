@@ -41,16 +41,16 @@ create table [Orders] (
 	[CreatedOn] datetimeoffset not null	
 )
 
-create table [OrderDetails] (
+create table [OrderItems] (
 	[Id] int primary key identity,
 	[OrderId] int not null,
 	[MedicineId] int not null,
 	[PrescriptionId] int,
 	[Quantity] int null,
 	[DeliveredOn] datetimeoffset,
-	constraint FK_OrderDetails_Orders foreign key ([OrderId]) references [Orders](Id),
-	constraint FK_OrderDetails_Medicines foreign key ([MedicineId]) references [Medicines](Id),
-	constraint FK_OrderDetails_Prescriptions foreign key ([PrescriptionId]) references [Prescriptions](Id)
+	constraint FK_OrderItems_Orders foreign key ([OrderId]) references [Orders](Id),
+	constraint FK_OrderItems_Medicines foreign key ([MedicineId]) references [Medicines](Id),
+	constraint FK_OrderItems_Prescriptions foreign key ([PrescriptionId]) references [Prescriptions](Id)
 )
 
 insert into Manufacturers (Name, Address, City, Country) values ('Polfarma S.A.', 'Lecznicza 2', 'Warszawa', 'Polska');

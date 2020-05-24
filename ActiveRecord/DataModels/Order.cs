@@ -10,6 +10,11 @@ namespace ActiveRecord.DataModels
     {
         public int Id { get; private set; }
         public DateTimeOffset CreatedOn { get; private set; }
+        public bool isOpen { get; private set; }
+
+
+        public Order(int id) { Id = id; }
+        public Order() { }
 
         public override bool Save()
         {
@@ -35,6 +40,41 @@ namespace ActiveRecord.DataModels
             if (!reader.HasRows) { throw new DbResultException($"Nie odnaleziono rekordu o id={Id}."); }
             _ = reader.Read();
             ParseReader(reader);
+        }
+
+        /// <summary>
+        /// Returns list of orders with at least one item.
+        /// If isOpen is set true, returns orders with at least one not delivered medicine
+        /// </summary>
+        /// <param name="isOpen"></param>
+        /// <returns></returns>
+        /// <exception cref="DbResultException"></exception>
+        public static List<Order> GetOrders(bool isOpen)
+        {
+            List<Order> orders = new List<Order>();
+            using SqlConnection connection = new SqlConnection();
+            using SqlCommand command = new SqlCommand();
+            command.Connection = connection;
+            command.CommandText = "select Orders.Id, Orders.CreatedOn from Orders " +
+                "join OrderItems on OrderItems.OrderId = Orders.Id";
+            if (isOpen) // Get open orders
+            {
+                command.CommandText += " where OrderItems.DeliveredOn is null";
+            }
+            command.CommandText += " group by Orders.Id, Orders.CreatedOn";
+            DbConnect(connection, dbName);
+            SqlDataReader reader = command.ExecuteReader();
+
+            if (!reader.HasRows) { throw new DbResultException($"Lista jest pusta."); }
+
+            while (reader.Read())
+            {
+                Order order = new Order();
+                order.ParseReader(reader);
+                orders.Add(order);
+            }
+
+            return orders;
         }
 
         private void ParseReader(SqlDataReader reader)
