@@ -8,6 +8,7 @@ W założeniu aplikacja ma obsługiwać aptekę w części magazynowej oraz reje
 
 Otwórz plik DbSchema.sql w edytorze Management Studio i wykonaj skrypt. Zostanie utworzona baza z przykładowymi danymi.
 Czasem skrypt przy pierwszym uruchomieniu daje komunikat o rollbacku. Dla pewności można skrypt uruchomić ponownie.
+W folderze solucji jest także plik `DrugStore.bak` wykonany w wersji SSMS 18.4
 
 ## To jest część pracy
 
