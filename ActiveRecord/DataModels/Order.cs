@@ -10,7 +10,7 @@ namespace ActiveRecord.DataModels
     {
         public int Id { get; private set; }
         public DateTimeOffset CreatedOn { get; private set; }
-        public bool isOpen { get; private set; }
+        public bool IsOpen { get; private set; }
 
 
         public Order(int id) { Id = id; }

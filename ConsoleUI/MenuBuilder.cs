@@ -84,19 +84,19 @@ namespace ConsoleUI
         public void PrintMenu()
         {
             Console.WriteLine();
-            ConsoleUI.WriteLine(MenuTitle, ConsoleUI.Colors.colorInputPrompt);
+            ConsoleUI.WriteLine(MenuTitle, ConsoleUI.Colors.colorTitleBar);
+            Console.WriteLine();
             foreach (MenuItem item in Items)
             {
-                ConsoleUI.Write(item.PromptKey.PadLeft(promptKeyPadding), ConsoleUI.Colors.colorInputPrompt);
+                ConsoleUI.Write(item.PromptKey.PadLeft(promptKeyPadding), ConsoleUI.Colors.colorTitleBar);
                 Console.WriteLine($" - {item.PromptText}");
             }
-            Console.Write(selectOptionText);
+            ConsoleUI.Write(selectOptionText, ConsoleUI.Colors.colorInputPrompt);
         }
 
         public Command GetCommand()
         {
             bool exitLoop = false;
-            //Console.TreatControlCAsInput = true; // Use of this causes need to use customised version of Readline()
 
             Command command = Command.exit;
             do
@@ -112,7 +112,9 @@ namespace ConsoleUI
                 }
                 Console.CursorLeft = selectOptionText.Length;
             } while (!exitLoop);
-            Console.WriteLine();
+            Console.CursorLeft = 0;
+            Console.WriteLine(new string(' ', selectOptionText.Length + 1));
+            Console.CursorTop -= 1;
             return command;
         }
 

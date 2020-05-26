@@ -66,8 +66,10 @@ namespace ConsoleUI
                                 manufacturer.Reload();
                             }
                             catch (Exception) { throw; }
-                            manufacturer = GetManufacturerDetails(id);
-                            AddOrUpdateManufacturer(manufacturer);
+                            ConsoleUI.WriteLine("Dane dostawcy. Jeśli pole ma pozostać nie zmienione, wciśnij [Enter].", ConsoleUI.Colors.colorHelp);
+                            ConsoleUI.WriteLine(manufacturer.ToString(), ConsoleUI.Colors.colorTitleBar); ;
+                            Manufacturer updatedManufacturer = GetManufacturerDetails(id);
+                            AddOrUpdateManufacturer(manufacturer, updatedManufacturer);
                         }
                         catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
@@ -76,7 +78,7 @@ namespace ConsoleUI
                         try
                         {
                             Manufacturer manufacturer = ReloadManufacturer(ConsoleUI.GetInt("Podaj Id dostawcy"));
-                            Console.WriteLine(manufacturer);
+                            ConsoleUI.WriteLine(manufacturer.ToString(), ConsoleUI.Colors.colorOutput);
                             if ((bool)GetBool("Czy pokazać leki tego dostawcy? ([Enter] = tak)", true))
                             {
                                 PrintMedicines(manufacturer.Id);
@@ -89,8 +91,10 @@ namespace ConsoleUI
                         try
                         {
                             Manufacturer manufacturer = GetManufacturerDetails();
+                            if(string.IsNullOrEmpty(manufacturer.Name)) { throw new Exception("Nazwa dostawcy nie może być pusta"); }
                             AddOrUpdateManufacturer(manufacturer);
-                            Console.WriteLine(manufacturer);
+                            ConsoleUI.WriteLine("Nowy dostawca:", ConsoleUI.Colors.colorTitleBar);
+                            ConsoleUI.WriteLine(manufacturer.ToString(), ConsoleUI.Colors.colorTitleBar);
                         }
                         catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
@@ -131,7 +135,7 @@ namespace ConsoleUI
                         try
                         {
                             Medicine medicine = ReloadMedicine(ConsoleUI.GetInt("Podaj Id leku"));
-                            Console.WriteLine(medicine);
+                            ConsoleUI.WriteLine(medicine.ToString(), ConsoleUI.Colors.colorOutput);
                         }
                         catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
@@ -167,7 +171,7 @@ namespace ConsoleUI
                         try
                         {
                             Prescription prescription = ReloadPrescription(ConsoleUI.GetInt("Podaj Id recepty"));
-                            Console.WriteLine(prescription);
+                            ConsoleUI.WriteLine(prescription.ToString(), ConsoleUI.Colors.colorOutput);
                         }
                         catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
@@ -258,8 +262,9 @@ namespace ConsoleUI
                         {
                             orderId = GetInt("Podaj numer zamówienia");
                             PrintOrderItems(orderId);
-                            PrintResultOK(DeliverOrder(orderId));
-                            PrintOrderItems(orderId);
+                            PrintResultOK(DeliverOrder(orderId, out decimal orderValue));
+                            //PrintOrderItems(orderId);
+                            Console.WriteLine($"Wartość zrealizowanych pozycji: {orderValue.ToString("#.00#")}");
                         }
                         catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;

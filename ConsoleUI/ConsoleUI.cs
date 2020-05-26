@@ -12,7 +12,8 @@ namespace ConsoleUI
     {
         public readonly struct Colors
         {
-            public const ConsoleColor colorInputPrompt = ConsoleColor.DarkCyan;
+            public const ConsoleColor colorInputPrompt = ConsoleColor.DarkGray;
+            public const ConsoleColor colorOutput = ConsoleColor.DarkGray;
             public const ConsoleColor colorSuccesss = ConsoleColor.Green;
             public const ConsoleColor colorError = ConsoleColor.Red;
             public const ConsoleColor colorWarning = ConsoleColor.Yellow;
@@ -22,7 +23,7 @@ namespace ConsoleUI
 
         public static string GetString(string prompt)
         {
-            Console.Write($"{prompt}: ");
+            ConsoleUI.Write($"{prompt}: ", ConsoleUI.Colors.colorInputPrompt);
             string output = Console.ReadLine().Trim();
             return string.IsNullOrEmpty(output) ? null : output;
         }
@@ -78,8 +79,8 @@ namespace ConsoleUI
         static bool? GetBool(string prompt, bool trueOnEmpty = false)
         {
             string stringToParse = ConsoleUI.GetString(prompt);
-            string[] yes = { "yes", "y", "tak", "t", " true" };
-            string[] no = { "no", "n", "nie", "false", "f" };
+            string[] yes = { "yes", "y", "tak", "t", " true", "1" };
+            string[] no = { "no", "n", "nie", "false", "f", "0" };
             if (string.IsNullOrEmpty(stringToParse))
             {
                 if (trueOnEmpty) { return true; }
@@ -94,6 +95,15 @@ namespace ConsoleUI
                 if (item == stringToParse.ToLower().Trim()) { return false; }
             }
             throw new FormatException("Nie rozpoznano odpowiedzi.");
+        }
+
+        public static string Update(string prompt, Object currentValue = null)
+        {
+            string current = currentValue.ToString();
+            Console.Write($"{prompt}: ");
+            Console.Write("");
+            string output = Console.ReadLine().Trim();
+            return string.IsNullOrEmpty(output) ? null : output;
         }
 
         public static void Write(string text, ConsoleColor color)

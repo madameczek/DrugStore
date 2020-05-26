@@ -65,6 +65,7 @@ namespace ConsoleUI
             paddingStockQty = Math.Max(paddingStockQty, "Magazyn".Length);
             int paddingIsPrescription = Math.Max(3, "Recepta".Length);
 
+            Console.WriteLine();
             ConsoleUI.WriteLine(new string('-', paddingName + paddingManufacturer + paddingPrice + paddingStockQty + paddingIsPrescription + 9), ConsoleUI.Colors.colorTitleBar);
             ConsoleUI.Write($"{"Id".PadLeft(4)}|{"Nazwa leku".PadRight(paddingName)}|{"Dostawca".PadRight(paddingManufacturer)}|" +
                 $"{"Cena".PadLeft(paddingPrice)}|{"Magazyn".PadLeft(paddingStockQty)}|" +

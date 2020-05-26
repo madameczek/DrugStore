@@ -14,7 +14,7 @@ namespace ConsoleUI
         {
             Manufacturer manufacturer = new Manufacturer(id)
             {
-                Name = ConsoleUI.GetNotEmptyString("Podaj nazwę dostawcy"),
+                Name = ConsoleUI.GetString("Podaj nazwę dostawcy"),
                 Address = ConsoleUI.GetString("Podaj adres"),
                 City = ConsoleUI.GetString("Podaj miasto"),
                 Country = ConsoleUI.GetString("Podaj kraj")
@@ -22,8 +22,15 @@ namespace ConsoleUI
             return manufacturer;
         }
 
-        private static void AddOrUpdateManufacturer(Manufacturer manufacturer)
+        private static void AddOrUpdateManufacturer(Manufacturer manufacturer, Manufacturer updatedManufacturer = null)
         {
+            if(updatedManufacturer != null)
+            {
+                if (!string.IsNullOrEmpty(updatedManufacturer.Name)) { manufacturer.Name = updatedManufacturer.Name; }
+                if (!string.IsNullOrEmpty(updatedManufacturer.Address)) { manufacturer.Address = updatedManufacturer.Address; }
+                if (!string.IsNullOrEmpty(updatedManufacturer.City)) { manufacturer.City = updatedManufacturer.City; }
+                if (!string.IsNullOrEmpty(updatedManufacturer.Country)) { manufacturer.Country = updatedManufacturer.Country; }
+            }
             try
             {
                 PrintResultOK(manufacturer.Save());
@@ -61,6 +68,7 @@ namespace ConsoleUI
             paddingCity = Math.Max(paddingCity, "Miasto".Length);
             paddingCountry = Math.Max(paddingCountry, "Kraj".Length);
 
+            Console.WriteLine();
             ConsoleUI.WriteLine(new string('-', paddingName + paddingAddress + paddingCity + paddingCountry + 8), ConsoleUI.Colors.colorTitleBar);
             ConsoleUI.Write($"{"Id".PadLeft(4)}|{"Nazwa firmy".PadRight(paddingName)}|{"Adres".PadRight(paddingAddress)}|" +
                 $"{"Miasto".PadRight(paddingCity)}|{"Kraj".PadRight(paddingCountry)}\n",ConsoleUI.Colors.colorTitleBar);

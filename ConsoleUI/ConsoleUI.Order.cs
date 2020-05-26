@@ -33,21 +33,25 @@ namespace ConsoleUI
             orders.ForEach(o => ConsoleUI.WriteLine(o.ToString(),ConsoleUI.Colors.colorTitleBar));
         }
 
-        private static bool DeliverOrder(int orderId)
+        private static bool DeliverOrder(int orderId, out decimal orderValue)
         {
             try
             {
                 List<OrderItem> orderItems = OrderItem.GetOrderItems(orderId);
                 List<Medicine> medicines = Medicine.GetMedicines();
+                orderValue = 0;
                 foreach (var item in orderItems)
                 {
-                    Medicine medicine = medicines.Where(m => m.Id == item.MedicineId && m.StockQty >= item.Quantity && item.DeliveredOn == null).FirstOrDefault();
+                    Medicine medicine = medicines.Where(m => m.Id == item.MedicineId && m.StockQty > 0 && item.Quantity > 0).FirstOrDefault();
                     if (medicine != null)
                     {
-                        medicine.StockQty -= item.Quantity;
+                        int deliveredQty = medicine.StockQty >= item.Quantity ? (int)item.Quantity : (int)medicine.StockQty;
+                        medicine.StockQty -= deliveredQty;
+                        item.Quantity -= deliveredQty;
                         item.DeliveredOn = DateTimeOffset.Now;
                         medicine.Save();
                         item.Save();
+                        orderValue += deliveredQty * medicine.Price?? 0;
                     }
                 }
             }

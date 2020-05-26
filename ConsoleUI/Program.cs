@@ -9,8 +9,7 @@ namespace ConsoleUI
         static void Main(string[] args)
         {
             Console.Title = "Drug Store 0.9 beta. SQL database based drug store helper.";
-            // Check if executable's arguments can be an existing database name 
-            // or take default name.
+            // Check if executable's arguments can be an existing database name or take default name.
             if (args.Length > 1)
             {
                 ConsoleUI.WriteLine("Można podać tylko jeden argument jako nazwę bazy danych.", ConsoleUI.Colors.colorError);
@@ -45,8 +44,7 @@ namespace ConsoleUI
                     ConsoleUI.Write("OK", ConsoleUI.Colors.colorSuccesss);
                     Thread.Sleep(800);
                     Console.CursorLeft = 0;
-                    ConsoleUI.Write("Drug Store 0.9 beta. Welcome".PadRight(connecting.Length + 2), ConsoleUI.Colors.colorTitleBar);
-                    Console.CursorLeft = 0;
+                    ConsoleUI.WriteLine("Drug Store 0.9 beta. Welcome".PadRight(connecting.Length + 2), ConsoleUI.Colors.colorTitleBar);
                 }
             }
             catch (SqlException)

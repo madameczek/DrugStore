@@ -6,7 +6,7 @@ namespace ConsoleUI
 {
     class PrescriptionMenu : MenuBuilder
     {
-        protected override string MenuTitle => "Zamówienia";
+        protected override string MenuTitle => "MENU: RECEPTY";
 
         protected override List<MenuItem> Items => items;
 

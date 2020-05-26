@@ -7,7 +7,7 @@ namespace ConsoleUI
 {
     class MainMenu : MenuBuilder
     {
-        protected override string MenuTitle => "Menu główne";
+        protected override string MenuTitle => "MENU GŁÓWNE";
         
         protected override List<MenuItem> Items => items;
 

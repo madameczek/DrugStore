@@ -6,7 +6,7 @@ namespace ConsoleUI
 {
     class ManufacturerMenu : MenuBuilder
     {
-        protected override string MenuTitle => "Zarządzanie dostawcami";
+        protected override string MenuTitle => "MENU: DOSTAWCY";
 
         protected override List<MenuItem> Items => items;
 
