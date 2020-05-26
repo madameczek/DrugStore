@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ActiveRecord.DataModels;
 using System.IO;
+using System.Globalization;
 
 namespace ConsoleUI
 {
@@ -38,8 +39,42 @@ namespace ConsoleUI
             foreach (var item in manufacturers)
             {
                 string line = "insert into Manufacturers (Name, Address, City, Country) " +
-                    $"values ('{item.Name}', '{(item.Address ?? "NULL")}', '{(item.City ?? "NULL")}', '{(item.Country ?? "NULL")}');{Environment.NewLine}";
+                    $"values ('{item.Name}', '{(item.Address ?? "NULL")}', '{(item.City ?? "NULL")}', '{item.Country ?? "NULL"}');{Environment.NewLine}";
                 File.AppendAllText("Manufacturers.txt", line);
+            }
+        }
+
+        internal void OrdersDump()
+        {
+            List<Order> orders;
+            try
+            {
+                orders = Order.GetOrders(false);
+                File.Delete("Orders.txt");
+            }
+            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+            foreach (var item in orders)
+            {
+                string line = $"insert into Orders (CreatedOn) values ('{item.CreatedOn.ToString(new CultureInfo("EN-us"))}');{Environment.NewLine}";
+                File.AppendAllText("Orders.txt", line);
+            }
+        }
+
+        internal void OrderItemsDump()
+        {
+            List<OrderItem> orderItems;
+            try
+            {
+                orderItems = OrderItem.GetOrderItems();
+                File.Delete("OrderItems.txt");
+            }
+            catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
+            foreach (var item in orderItems)
+            {
+                string line = "insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) "+
+                    $"values ({item.OrderId}, {item.MedicineId}, {(item.PrescriptionId == null ? "NULL": item.PrescriptionId.ToString())}, "+
+                    $"{(item.Quantity == null ? "NULL" : item.Quantity.ToString())}, {(item.DeliveredOn == null ? "NULL" : item.DeliveredOn.ToString())});{Environment.NewLine}";
+                File.AppendAllText("OrderItems.txt", line);
             }
         }
     }

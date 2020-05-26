@@ -24,11 +24,11 @@ namespace ConsoleUI
 
             if(isOpen)
             {
-                Console.WriteLine("Zamówienia posiadające nie zrealizowane pozycje");
+                Console.WriteLine("Zamówienia posiadające nie zrealizowane pozycje:");
             }
             else
             {
-                Console.WriteLine("Wszystkie zamówienia");
+                Console.WriteLine("Wszystkie zamówienia:");
             }
             orders.ForEach(o => ConsoleUI.WriteLine(o.ToString(),ConsoleUI.Colors.colorTitleBar));
         }

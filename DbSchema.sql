@@ -74,3 +74,20 @@ insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) va
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Brain Healer', 2, 834.00, 2, 0);
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Neomag Rozkurcz nogi', 5, 19.32, 43, 0);
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Neomag Skurcz Forte', 4, 23.35, 43, 0);
+
+insert into Orders (CreatedOn) values ('2020.05.26 13:46:14 +02:00');
+insert into Orders (CreatedOn) values ('2020.05.20 14:19:28 +02:00');
+insert into Orders (CreatedOn) values ('2020.05.26 14:23:25 +02:00');
+
+insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (1, 1, NULL, 2, NULL);
+insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (1, 1, NULL, 2, NULL);
+insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (1, 4, NULL, 1, NULL);
+insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (1, 7, NULL, 2, NULL);
+insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (1, 4, NULL, 1, NULL);
+insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (2, 15, NULL, 1, NULL);
+insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (2, 13, NULL, 1, NULL);
+insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (2, 7, NULL, 3, NULL);
+insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (2, 3, NULL, 2, NULL);
+insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (2, 2, NULL, 1, NULL);
+insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (3, 7, NULL, 0, '2020.05.26 14:24:01 +02:00');
+

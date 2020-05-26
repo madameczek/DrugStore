@@ -263,8 +263,8 @@ namespace ConsoleUI
                             orderId = GetInt("Podaj numer zamówienia");
                             PrintOrderItems(orderId);
                             PrintResultOK(DeliverOrder(orderId, out decimal orderValue));
-                            //PrintOrderItems(orderId);
                             Console.WriteLine($"Wartość zrealizowanych pozycji: {orderValue.ToString("#.00#")}");
+                            PrintOrderItems(orderId);
                         }
                         catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); }
                         break;
@@ -322,7 +322,9 @@ namespace ConsoleUI
                     case Command.exit:
                         /*DatabaseDump dd = new DatabaseDump();
                         dd.MedicinesDump();
-                        dd.ManufacturersDump();*/
+                        dd.ManufacturersDump();
+                        dd.OrdersDump();
+                        dd.OrderItemsDump();*/
                         break;
                     default:
                         ConsoleUI.WriteLine("Komenda nie obsługiwana", ConsoleUI.Colors.colorWarning);

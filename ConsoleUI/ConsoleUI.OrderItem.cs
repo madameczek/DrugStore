@@ -70,7 +70,7 @@ namespace ConsoleUI
             paddingMedicineName = Math.Max(paddingMedicineName, "Nazwa leku".Length);
 
             Console.WriteLine();
-            ConsoleUI.WriteLine($"Pozycje zamówienia {orderId}:", ConsoleUI.Colors.colorTitleBar);
+            ConsoleUI.WriteLine($"Pozycje zamówienia {orderId}. Kolumna 'Ilość' pokazuje ilość do realizacji.");
             ConsoleUI.WriteLine(new string('-', paddingMedicineName + paddingMedicinePrice + paddingOrderQuantity + paddingItemDeliveredOn + 6), ConsoleUI.Colors.colorTitleBar);
             ConsoleUI.Write($"{"Id".PadLeft(2)}|{"Nazwa leku".PadRight(paddingMedicineName)}|{"Ilość".PadLeft(paddingOrderQuantity)}|" +
                 $"{"Cena".PadLeft(paddingMedicinePrice)}|{"Wydano".PadRight(paddingItemDeliveredOn)}\n", ConsoleUI.Colors.colorTitleBar);
