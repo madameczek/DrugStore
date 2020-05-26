@@ -59,7 +59,7 @@ namespace ActiveRecord.DataModels
                 "join OrderItems on OrderItems.OrderId = Orders.Id";
             if (isOpen) // Get open orders
             {
-                command.CommandText += " where OrderItems.DeliveredOn is null";
+                command.CommandText += " where OrderItems.Quantity >0";
             }
             command.CommandText += " group by Orders.Id, Orders.CreatedOn";
             DbConnect(connection, dbName);
