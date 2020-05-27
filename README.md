@@ -2,7 +2,7 @@
 
 Aplikacja ma obsługiwać aptekę w części magazynowej oraz rejestracji zamówień i recept.
 
-![Demonstracja menu dostawców](./img/suppliers.gif)
+![Demonstracja menu dostawców]("./img/suppliers.gif")
 
 ## Geneza
 
