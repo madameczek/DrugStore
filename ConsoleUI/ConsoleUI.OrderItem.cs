@@ -31,7 +31,6 @@ namespace ConsoleUI
             catch (Exception) { throw; }
         }
 
-
         private static OrderItem ReloadOrderItem(int id)
         {
             OrderItem orderItem = new OrderItem(id);
@@ -43,9 +42,6 @@ namespace ConsoleUI
             catch (Exception) { throw new Exception("Nieznany błąd"); }
             return orderItem;
         }
-
-
-
 
         private static void PrintOrderItems(int orderId)
         {
@@ -70,7 +66,7 @@ namespace ConsoleUI
             paddingMedicineName = Math.Max(paddingMedicineName, "Nazwa leku".Length);
 
             Console.WriteLine();
-            ConsoleUI.WriteLine($"Pozycje zamówienia {orderId}. Kolumna 'Ilość' pokazuje ilość do realizacji.");
+            ConsoleUI.WriteLine($"Pozycje zamówienia {orderId}.\nW kolumnie 'Ilość' jest ilość pozostała do realizacji.");
             ConsoleUI.WriteLine(new string('-', paddingMedicineName + paddingMedicinePrice + paddingOrderQuantity + paddingItemDeliveredOn + 6), ConsoleUI.Colors.colorTitleBar);
             ConsoleUI.Write($"{"Id".PadLeft(2)}|{"Nazwa leku".PadRight(paddingMedicineName)}|{"Ilość".PadLeft(paddingOrderQuantity)}|" +
                 $"{"Cena".PadLeft(paddingMedicinePrice)}|{"Wydano".PadRight(paddingItemDeliveredOn)}\n", ConsoleUI.Colors.colorTitleBar);

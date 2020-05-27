@@ -79,7 +79,7 @@ namespace ConsoleUI
                         {
                             Manufacturer manufacturer = ReloadManufacturer(ConsoleUI.GetInt("Podaj Id dostawcy"));
                             ConsoleUI.WriteLine(manufacturer.ToString(), ConsoleUI.Colors.colorOutput);
-                            if ((bool)GetBool("Czy pokazać leki tego dostawcy? ([Enter] = tak)", true))
+                            if ((bool)GetBool("Czy pokazać leki tego dostawcy? ([t|n], [Enter] = tak)", true))
                             {
                                 PrintMedicines(manufacturer.Id);
                             }
@@ -306,7 +306,7 @@ namespace ConsoleUI
                             orderItem.Reload();
                             if(orderItem.DeliveredOn == null)
                             {
-                                orderItem.Remove();
+                                PrintResultOK(orderItem.Remove());
                             }
                             else
                             {

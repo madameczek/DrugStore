@@ -46,6 +46,7 @@ namespace ConsoleUI
 
         internal void OrdersDump()
         {
+            CultureInfo culture = new CultureInfo("EN-us");
             List<Order> orders;
             try
             {
@@ -55,13 +56,14 @@ namespace ConsoleUI
             catch (Exception e) { ConsoleUI.WriteLine(e.Message, ConsoleUI.Colors.colorError); throw; }
             foreach (var item in orders)
             {
-                string line = $"insert into Orders (CreatedOn) values ('{item.CreatedOn.ToString(new CultureInfo("EN-us"))}');{Environment.NewLine}";
+                string line = $"insert into Orders (CreatedOn) values ('{item.CreatedOn.ToString(culture)}');{Environment.NewLine}";
                 File.AppendAllText("Orders.txt", line);
             }
         }
 
         internal void OrderItemsDump()
         {
+            CultureInfo culture = new CultureInfo("EN-us");
             List<OrderItem> orderItems;
             try
             {
@@ -73,7 +75,7 @@ namespace ConsoleUI
             {
                 string line = "insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) "+
                     $"values ({item.OrderId}, {item.MedicineId}, {(item.PrescriptionId == null ? "NULL": item.PrescriptionId.ToString())}, "+
-                    $"{(item.Quantity == null ? "NULL" : item.Quantity.ToString())}, {(item.DeliveredOn == null ? "NULL" : item.DeliveredOn.ToString())});{Environment.NewLine}";
+                    $"{(item.Quantity == null ? "NULL" : item.Quantity.ToString())}, {(item.DeliveredOn == null ? "NULL" : ((DateTimeOffset)item.DeliveredOn).ToString(culture))});{Environment.NewLine}";
                 File.AppendAllText("OrderItems.txt", line);
             }
         }

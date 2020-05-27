@@ -58,6 +58,8 @@ insert into Manufacturers (Name, Address, City, Country) values ('Pracownia home
 insert into Manufacturers (Name, Address, City, Country) values ('Pigu³a PPHU', 'G³ówna 34', 'Z¹bki', 'Polska');
 insert into Manufacturers (Name, Address, City, Country) values ('Hurtownia leków "Med-hurt"', 'Cicha 2', 'Ciechanów', '');
 insert into Manufacturers (Name, Address, City, Country) values ('Pfizer GmbH', 'GrosseStrasse 1', 'Linz', 'Niemcy');
+insert into Manufacturers (Name, Address, City, Country) values ('American NoProblem Corp.', 'Green House', 'Washingtown', 'USA');
+insert into Manufacturers (Name, Address, City, Country) values ('3M Poland', 'Warszawska 345', 'Nadarzyn', 'Polska');
 
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Vitamina A', 4, 34.12, 32, 0);
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Vitamina B', 4, 12.00, 53, 0);
@@ -74,6 +76,13 @@ insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) va
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Brain Healer', 2, 834.00, 2, 0);
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Neomag Rozkurcz nogi', 5, 19.32, 43, 0);
 insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Neomag Skurcz Forte', 4, 23.35, 43, 0);
+insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Vitamina B29 Fortress', 6, 999.950, 23, 1);
+insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Nolpaza 20 mg', 4, 33.300, 4, 1);
+insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Slow-Mag 60 kaps.', 5, 23.230, 4, 0);
+insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Woda utleniona 2%', 3, 4.120, 55, 0);
+insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Maseczka 3M z filtrem', 7, 23.500, 45, 0);
+insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Maseczka 3M jednorazowa', 7, 2.600, 99, 0);
+insert into Medicines (Name, ManufacturerId, Price, StockQty, IsPrescription) values ('Filtr do maseczki 3M', 7, 2.780, 234, 0);
 
 insert into Orders (CreatedOn) values ('2020.05.26 13:46:14 +02:00');
 insert into Orders (CreatedOn) values ('2020.05.20 14:19:28 +02:00');
@@ -90,4 +99,4 @@ insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, Delivered
 insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (2, 3, NULL, 2, NULL);
 insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (2, 2, NULL, 1, NULL);
 insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (3, 7, NULL, 0, '2020.05.26 14:24:01 +02:00');
-
+insert into OrderItems (OrderId, MedicineId, PrescriptionId, Quantity, DeliveredOn) values (3, 15, NULL, 1, NULL);
