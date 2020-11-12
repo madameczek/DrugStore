@@ -1,5 +1,13 @@
 # DrugStore
 
+## Supplement
+
+This is a super old project that I keep for documentation reasons only. **It is not a sample of my present skills**. Everyone was once a beginner and this is a postcard from the past :)
+
+Hej, To jest bardzo dawny projekt, który ja trzymam tylko z powodów dokumentacyjnych. **Nie jest to żadna próbka moich teraźniejszych umiejętności**. Każdy był kiedyś początkującym, a to jest pocztówka z przeszłości :)
+
+## I dalej oryginalny opis
+
 Aplikacja ma obsługiwać aptekę w części magazynowej oraz rejestracji zamówień i recept.
 
 ![Demonstracja menu dostawców](Img/suppliers.gif)
